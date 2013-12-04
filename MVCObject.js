@@ -5,7 +5,8 @@
 
 
 (function() {
-  var MVCObject;
+  var MVCObject,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   MVCObject = (function() {
     var capitalize, getGetterName, getSetterName, getUid, getterNameCache, invokeChange, setterNameCache, uid;
@@ -43,19 +44,30 @@
     };
 
     invokeChange = function(target, targetKey) {
-      var bindingName, bindingObj, evt, _base, _ref, _results;
+      var bindingName, bindingObj, evt, handler, _base, _i, _len, _ref, _ref1, _results;
       evt = "" + targetKey + "_changed";
       if (target[evt]) {
         target[evt]();
       } else {
-        target.changed(targetKey);
+        if (typeof target.changed === "function") {
+          target.changed(targetKey);
+        }
+      }
+      if (target.__events__) {
+        if (target.__events__[evt]) {
+          _ref = target.__events__[evt];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            handler = _ref[_i];
+            handler.call(target);
+          }
+        }
       }
       target.__bindings__ || (target.__bindings__ = {});
       (_base = target.__bindings__)[targetKey] || (_base[targetKey] = {});
-      _ref = target.__bindings__[targetKey];
+      _ref1 = target.__bindings__[targetKey];
       _results = [];
-      for (bindingName in _ref) {
-        bindingObj = _ref[bindingName];
+      for (bindingName in _ref1) {
+        bindingObj = _ref1[bindingName];
         _results.push(invokeChange(bindingObj.target, bindingObj.targetKey));
       }
       return _results;
@@ -100,6 +112,18 @@
     };
 
     MVCObject.prototype.changed = function() {};
+
+    MVCObject.prototype.addListener = function(eventName, handler) {
+      var _base;
+      this.__events__ || (this.__events__ = {});
+      (_base = this.__events__)[eventName] || (_base[eventName] = []);
+      if (__indexOf.call(this.__events__[eventName], handler) >= 0) {
+        return false;
+      } else {
+        this.__events__[eventName].push(handler);
+        return true;
+      }
+    };
 
     MVCObject.prototype.notify = function(key) {
       var accessor, target, targetKey;

@@ -43,6 +43,14 @@ describe 'MVCObject', ->
         m.notify 'k'
         expect(callbackCalled).to.equal true
 
+    it 'NotifyKeyEvent', ->
+        m = new MVCObject
+        eventDispatched = false
+        m.addListener 'k_changed', ->
+            eventDispatched = true
+        m.notify 'k'
+        expect(eventDispatched).to.equal true
+
     it 'SetNotifyCallback', ->
         m = new MVCObject()
         callbackCalled = false
@@ -68,6 +76,14 @@ describe 'MVCObject', ->
         n.bindTo 'k', m
         m.set 'k', 1
         expect(callbackCalled).to.equal true
+
+    it 'SetNotifyKeyEvent', ->
+        m = new MVCObject
+        eventDispatched = false
+        m.addListener 'k_changed', ->
+            eventDispatched = true
+        m.set 'k', 1
+        expect(eventDispatched).to.equal true
 
     it 'SetBind', ->
         m = new MVCObject()

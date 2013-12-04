@@ -14,6 +14,7 @@ applications, it doesn't have to be Google Maps related.
 
 Methods | Return Value | Description
 ----- | ----- | -----
+addListener(eventName:string) | boolean | Adds the given listener function to the given event name.
 bindTo(key:string, target:MVCObject, targetKey?:string, noNotify?:boolean) | None | Binds a View to a Model.
 changed(key:string) | None | Generic handler for state changes. Override this in derived classes to handle arbitrary state changes.
 get(key:string) | * | Gets a value.
