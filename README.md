@@ -6,7 +6,15 @@ This is a standalone class - you can use it in any of your JavaScript
 applications, it doesn't have to be Google Maps related.
 
 #### test
+
     npm install
+
+If you have install `mocha` globally, just run
+
+    mocha
+
+otherwise, run
+
     npm test
 
 #### API
