@@ -91,9 +91,6 @@ class MVCObject
             else
                 @set key, value
 
-    setOptions: (options)->
-        @setValues options
-
     bindTo: (key, target, targetKey, noNotify)->
         targetKey or= key
         @unbind key

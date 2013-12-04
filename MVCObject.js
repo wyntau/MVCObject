@@ -129,10 +129,6 @@
       return _results;
     };
 
-    MVCObject.prototype.setOptions = function(options) {
-      return this.setValues(options);
-    };
-
     MVCObject.prototype.bindTo = function(key, target, targetKey, noNotify) {
       var accessor, bindingObj, _base;
       targetKey || (targetKey = key);
