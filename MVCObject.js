@@ -48,9 +48,7 @@
       if (target[evt]) {
         target[evt]();
       } else {
-        if (typeof target.changed === "function") {
-          target.changed(targetKey);
-        }
+        target.changed(targetKey);
       }
       target.__bindings__ || (target.__bindings__ = {});
       (_base = target.__bindings__)[targetKey] || (_base[targetKey] = {});
@@ -100,6 +98,8 @@
         return invokeChange(this, key);
       }
     };
+
+    MVCObject.prototype.changed = function() {};
 
     MVCObject.prototype.notify = function(key) {
       var accessor, target, targetKey;

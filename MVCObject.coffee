@@ -31,7 +31,7 @@ class MVCObject
         if target[evt]
             target[evt]()
         else
-            target.changed? targetKey
+            target.changed targetKey
 
         target.__bindings__ or= {}
         target.__bindings__[targetKey] or= {}
@@ -71,6 +71,8 @@ class MVCObject
         else
             @[key] = value
             invokeChange @, key
+
+    changed: ->
 
     notify: (key)->
         @__accessors__ or= {}
