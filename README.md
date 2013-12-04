@@ -5,12 +5,12 @@ An implementation of Google Maps' MVCObject.
 This is a standalone class - you can use it in any of your JavaScript
 applications, it doesn't have to be Google Maps related.
 
-#### test
+### test
 
     npm install
     make test
 
-#### API
+### API
 
 Methods | Return Value | Description
 ----- | ----- | -----
@@ -24,7 +24,7 @@ unbind(key:string) | None | Removes a binding. Unbinding will set the unbound pr
 unbindAll() | None | Removes all bindings.
 
 
-#### LICENSE
+### LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2013 Jeremial jeremial90@gmail.com
