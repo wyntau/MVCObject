@@ -1,10 +1,4 @@
 MVCObject = require '..'
-chai      = require 'chai'
-sinon     = require 'sinon'
-sinonChai = require 'sinon-chai'
-expect    = chai.expect
-
-chai.use sinonChai
 
 describe 'MVCObject', ->
     it 'model', ->
