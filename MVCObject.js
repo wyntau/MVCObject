@@ -9,7 +9,7 @@
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   MVCObject = (function() {
-    var capitalize, getGetterName, getSetterName, getUid, getterNameCache, invokeChange, setterNameCache, uid;
+    var capitalize, getGetterName, getSetterName, getUid, getterNameCache, setterNameCache, triggerChange, uid;
 
     function MVCObject() {}
 
@@ -43,7 +43,7 @@
       return obj.__uid__ || (obj.__uid__ = ++uid);
     };
 
-    invokeChange = function(target, targetKey) {
+    triggerChange = function(target, targetKey) {
       var bindingName, bindingObj, evt, handler, _base, _i, _len, _ref, _ref1, _results;
       evt = "" + targetKey + "_changed";
       if (target[evt]) {
@@ -68,7 +68,7 @@
       _results = [];
       for (bindingName in _ref1) {
         bindingObj = _ref1[bindingName];
-        _results.push(invokeChange(bindingObj.target, bindingObj.targetKey));
+        _results.push(triggerChange(bindingObj.target, bindingObj.targetKey));
       }
       return _results;
     };
@@ -107,7 +107,7 @@
         }
       } else {
         this[key] = value;
-        return invokeChange(this, key);
+        return triggerChange(this, key);
       }
     };
 
@@ -134,7 +134,7 @@
         target = accessor.target;
         return target.notify(targetKey);
       } else {
-        return invokeChange(this, key);
+        return triggerChange(this, key);
       }
     };
 
@@ -172,7 +172,7 @@
       this.__accessors__[key] = accessor;
       target.__bindings__[targetKey][getUid(bindingObj)] = bindingObj;
       if (!noNotify) {
-        return invokeChange(this, key);
+        return triggerChange(this, key);
       }
     };
 

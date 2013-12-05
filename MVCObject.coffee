@@ -25,7 +25,7 @@ class MVCObject
     getUid = (obj)->
         obj.__uid__ or= ++uid
 
-    invokeChange = (target, targetKey)->
+    triggerChange = (target, targetKey)->
         evt = "#{targetKey}_changed"
 
         if target[evt]
@@ -42,7 +42,7 @@ class MVCObject
         target.__bindings__[targetKey] or= {}
 
         for bindingName, bindingObj of target.__bindings__[targetKey]
-            invokeChange bindingObj.target, bindingObj.targetKey
+            triggerChange bindingObj.target, bindingObj.targetKey
 
     get: (key)->
         @__accessors__ or= {}
@@ -75,7 +75,7 @@ class MVCObject
                 target.set targetKey, value
         else
             @[key] = value
-            invokeChange @, key
+            triggerChange @, key
 
     changed: ->
 
@@ -98,7 +98,7 @@ class MVCObject
             target = accessor.target
             target.notify targetKey
         else
-            invokeChange @, key
+            triggerChange @, key
 
     setValues: (values)->
         for key, value of values
@@ -129,7 +129,7 @@ class MVCObject
         target.__bindings__[targetKey][getUid bindingObj] = bindingObj
 
         if not noNotify
-            invokeChange @, key
+            triggerChange @, key
 
     unbind: (key)->
         @__accessors__ or= {}
