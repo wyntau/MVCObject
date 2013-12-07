@@ -33,10 +33,10 @@ class MVCObject
         else
             target.changed? targetKey
 
-        if target.__events__
-            if target.__events__[evt]
-                for handler in target.__events__[evt]
-                    handler.call target
+        # if target.__events__
+        #     if target.__events__[evt]
+        #         for handler in target.__events__[evt]
+        #             handler.call target
 
         target.__bindings__ or= {}
         target.__bindings__[targetKey] or= {}
@@ -79,15 +79,15 @@ class MVCObject
 
     changed: ->
 
-    addListener: (eventName, handler)->
-        @__events__ or= {}
-        @__events__[eventName] or= []
+    # addListener: (eventName, handler)->
+    #     @__events__ or= {}
+    #     @__events__[eventName] or= []
 
-        if handler in @__events__[eventName]
-            false
-        else
-            @__events__[eventName].push handler
-            true
+    #     if handler in @__events__[eventName]
+    #         false
+    #     else
+    #         @__events__[eventName].push handler
+    #         true
 
     notify: (key)->
         @__accessors__ or= {}

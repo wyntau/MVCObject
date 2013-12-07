@@ -38,12 +38,12 @@ describe 'MVCObject', ->
         m.notify 'k'
         expect(spy.calledOnce).to.be.ok
 
-    it 'NotifyKeyEvent', ->
-        m = new MVCObject
-        spy = sinon.spy()
-        m.addListener 'k_changed', spy
-        m.notify 'k'
-        expect(spy.calledOnce).to.be.ok
+    # it 'NotifyKeyEvent', ->
+    #     m = new MVCObject
+    #     spy = sinon.spy()
+    #     m.addListener 'k_changed', spy
+    #     m.notify 'k'
+    #     expect(spy.calledOnce).to.be.ok
 
     it 'SetNotifyCallback', ->
         m = new MVCObject()
@@ -80,12 +80,12 @@ describe 'MVCObject', ->
         expect(spy1.calledTwice).to.be.ok
         expect(spy2.calledOnce).to.be.ok
 
-    it 'SetNotifyKeyEvent', ->
-        m = new MVCObject
-        spy = sinon.spy()
-        m.addListener 'k_changed', spy
-        m.set 'k', 1
-        expect(spy.calledOnce).to.be.ok
+    # it 'SetNotifyKeyEvent', ->
+    #     m = new MVCObject
+    #     spy = sinon.spy()
+    #     m.addListener 'k_changed', spy
+    #     m.set 'k', 1
+    #     expect(spy.calledOnce).to.be.ok
 
     it 'SetBind', ->
         m = new MVCObject()

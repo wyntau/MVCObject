@@ -1,20 +1,13 @@
 ## MVCObject
 
-An implementation of Google Maps' MVCObject.
+An CoffeeScript implementation of [Google Maps' MVCObject](https://developers.google.com/maps/articles/mvcfun).
 
-This is a standalone class - you can use it in any of your JavaScript
-applications, it doesn't have to be Google Maps related.
+This is a standalone class - you can use it in any of your JavaScript applications, it doesn't have to be Google Maps related.
 
-### test
-
-    npm install
-    make test
-
-### API
+### APIs
 
 Methods | Return Value | Description
 ----- | ----- | -----
-addListener(eventName:string, handler:Function) | boolean | Adds the given listener function to the given event name.
 bindTo(key:string, target:MVCObject, targetKey?:string, noNotify?:boolean) | None | Binds a View to a Model.
 changed(key:string) | None | Generic handler for state changes. Override this in derived classes to handle arbitrary state changes.
 get(key:string) | * | Gets a value.
@@ -24,6 +17,35 @@ setValues(values:Object) | None | Sets a collection of key-value pairs.
 unbind(key:string) | None | Removes a binding. Unbinding will set the unbound property to the current value. The object will not be notified, as the value has not changed.
 unbindAll() | None | Removes all bindings.
 
+### Usage
+1. CoffeeScript in Node.js
+
+        MVCObject = require 'MVCObject'
+
+        class class1 extends MVCObject
+            constructor: ->
+                ...
+
+2. JavaScript in Node.js
+
+        var MVCObject = require('MVCObject');
+
+        function class1(){}
+        class1.prototype = new MVCObject();
+
+3. JavaScript in Browsers
+
+        <!-- include the MVCObject.js -->
+        <script src="/path/to/MVCObject.js"></script>
+
+        function class1(){}
+        class1.prototype = new MVCObject();
+
+### test
+Thanks to @twpayne, the test suites are based on his [mvcobject_test.js](https://github.com/twpayne/mvcobject/blob/master/src/mvc/mvcobject_test.js).
+
+    npm install
+    make test
 
 ### LICENSE
 The MIT License (MIT)

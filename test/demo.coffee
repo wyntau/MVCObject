@@ -142,11 +142,11 @@ describe 'Demo', ->
         f = new MVCObject()
 
         a.bindTo 'k', b
-        # f.bindTo 'k', c
+        f.bindTo 'k', c
         b.bindTo 'k', c
         c.bindTo 'k', d
         e.bindTo 'k', b
-        f.bindTo 'k', c
+        # f.bindTo 'k', c
 
         a.k_changed = ->
             console.log 'a: k_changed'
