@@ -18,6 +18,15 @@ unbind(key:string) | None | Removes a binding. Unbinding will set the unbound pr
 unbindAll() | None | Removes all bindings.
 
 ### Usage
+0. Install
+    - npm
+
+            npm install mvcobject
+
+    - bower
+
+            bower install mvcobject
+
 1. CoffeeScript in Node.js
 
         MVCObject = require 'MVCObject'
