@@ -1,0 +1,21 @@
+{
+  "name": "mvcobject",
+  "main": "MVCObject.js",
+  "version": "0.0.2",
+  "homepage": "https://github.com/Jeremial/MVCObject",
+  "authors": [
+    "Jeremial <jeremial90@gmail.com>"
+  ],
+  "description": "A CoffeeScript implementation of Google Maps' MVCObject",
+  "keywords": [
+    "MVCObject"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

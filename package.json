@@ -1,6 +1,6 @@
 {
   "name": "mvcobject",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A CoffeeScript implementation of Google Maps' MVCObject",
   "main": "MVCObject.js",
   "directories": {
