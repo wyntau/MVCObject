@@ -29,7 +29,7 @@ unbindAll() | None | Removes all bindings.
 
 1. CoffeeScript in Node.js
 
-        MVCObject = require 'MVCObject'
+        MVCObject = require 'mvcobject'
 
         class class1 extends MVCObject
             constructor: ->
@@ -37,7 +37,7 @@ unbindAll() | None | Removes all bindings.
 
 2. JavaScript in Node.js
 
-        var MVCObject = require('MVCObject');
+        var MVCObject = require('mvcobject');
 
         function class1(){}
         class1.prototype = new MVCObject();
