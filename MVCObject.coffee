@@ -56,6 +56,8 @@ class MVCObject
                 value = target[getterName]()
             else
                 value = target.get targetKey
+            if accessor.to
+                value = accessor.to value
         else if @hasOwnProperty key
             value = @[key]
 
@@ -69,6 +71,8 @@ class MVCObject
             targetKey = accessor.targetKey
             target = accessor.target
             setterName = getSetterName targetKey
+            if accessor.from
+                value = accessor.from value
             if target[setterName]
                 target[setterName] value
             else
@@ -116,16 +120,12 @@ class MVCObject
         target.__bindings__ or= {}
         target.__bindings__[targetKey] or= {}
 
-        bindingObj =
-            target: @
-            targetKey: key
+        binding = new Accessor @, key
 
-        accessor =
-            target: target
-            targetKey: targetKey
+        accessor = new Accessor target, targetKey
 
         @__accessors__[key] = accessor
-        target.__bindings__[targetKey][getUid @] = bindingObj
+        target.__bindings__[targetKey][getUid @] = binding
 
         if not noNotify
             triggerChange @, key
@@ -146,6 +146,12 @@ class MVCObject
 
         for key of @__accessors__
             @unbind key
+
+class Accessor
+    constructor: (@target, @targetKey)->
+
+    transform: (@from, @to)->
+        @target.notify @targetKey
 
 if module?
     module.exports = MVCObject

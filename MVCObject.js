@@ -5,7 +5,7 @@
 
 
 (function() {
-  var MVCObject;
+  var Accessor, MVCObject;
 
   MVCObject = (function() {
     var capitalize, getGetterName, getSetterName, getUid, getterNameCache, setterNameCache, triggerChange, uid;
@@ -76,6 +76,9 @@
         } else {
           value = target.get(targetKey);
         }
+        if (accessor.to) {
+          value = accessor.to(value);
+        }
       } else if (this.hasOwnProperty(key)) {
         value = this[key];
       }
@@ -90,6 +93,9 @@
         targetKey = accessor.targetKey;
         target = accessor.target;
         setterName = getSetterName(targetKey);
+        if (accessor.from) {
+          value = accessor.from(value);
+        }
         if (target[setterName]) {
           return target[setterName](value);
         } else {
@@ -132,22 +138,16 @@
     };
 
     MVCObject.prototype.bindTo = function(key, target, targetKey, noNotify) {
-      var accessor, bindingObj, _base;
+      var accessor, binding, _base;
       targetKey || (targetKey = key);
       this.unbind(key);
       this.__accessors__ || (this.__accessors__ = {});
       target.__bindings__ || (target.__bindings__ = {});
       (_base = target.__bindings__)[targetKey] || (_base[targetKey] = {});
-      bindingObj = {
-        target: this,
-        targetKey: key
-      };
-      accessor = {
-        target: target,
-        targetKey: targetKey
-      };
+      binding = new Accessor(this, key);
+      accessor = new Accessor(target, targetKey);
       this.__accessors__[key] = accessor;
-      target.__bindings__[targetKey][getUid(this)] = bindingObj;
+      target.__bindings__[targetKey][getUid(this)] = binding;
       if (!noNotify) {
         return triggerChange(this, key);
       }
@@ -177,6 +177,22 @@
     };
 
     return MVCObject;
+
+  })();
+
+  Accessor = (function() {
+    function Accessor(target, targetKey) {
+      this.target = target;
+      this.targetKey = targetKey;
+    }
+
+    Accessor.prototype.transform = function(from, to) {
+      this.from = from;
+      this.to = to;
+      return this.target.notify(this.targetKey);
+    };
+
+    return Accessor;
 
   })();
 
