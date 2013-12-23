@@ -130,6 +130,8 @@ class MVCObject
         if not noNotify
             triggerChange @, key
 
+        accessor
+
     unbind: (key)->
         @__accessors__ or= {}
         accessor = @__accessors__[key]

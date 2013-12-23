@@ -97,6 +97,19 @@ describe 'MVCObject', ->
         expect(m.get('k')).to.equal 1
         expect(n.get('k')).to.equal 1
 
+    it 'SetBindTransform', ->
+        m = new MVCObject()
+        n = new MVCObject()
+        m.set 'k', 1
+        expect(m.get('k')).to.equal 1
+        expect(n.get('k')).to.equal undefined
+        n.bindTo('k', m).transform (fromValue)->
+            fromValue / 2
+        , (toValue)->
+            toValue * 2
+        expect(m.get('k')).to.equal 1
+        expect(n.get('k')).to.equal 2
+
     it 'BindSet', ->
         m = new MVCObject()
         n = new MVCObject()
@@ -105,6 +118,17 @@ describe 'MVCObject', ->
         expect(m.get('k')).to.equal 1
         expect(n.get('k')).to.equal 1
 
+    it 'BindSetTransform', ->
+        m = new MVCObject()
+        n = new MVCObject()
+        n.bindTo('k', m).transform (fromValue)->
+            fromValue / 2
+        , (toValue)->
+            toValue * 2
+        m.set 'k', 1
+        expect(m.get('k')).to.equal 1
+        expect(n.get('k')).to.equal 2
+
     it 'BindSetBackwards', ->
         m = new MVCObject()
         n = new MVCObject()
@@ -112,6 +136,17 @@ describe 'MVCObject', ->
         n.set 'k', 1
         expect(m.get('k')).to.equal 1
         expect(n.get('k')).to.equal 1
+
+    it 'BindSetBackwardsTransform', ->
+        m = new MVCObject()
+        n = new MVCObject()
+        n.bindTo('k', m).transform (fromValue)->
+            fromValue / 2
+        , (toValue)->
+            toValue * 2
+        n.set 'k', 2
+        expect(m.get('k')).to.equal 1
+        expect(n.get('k')).to.equal 2
 
     it 'SetBindBackwards', ->
         m = new MVCObject()

@@ -149,8 +149,9 @@
       this.__accessors__[key] = accessor;
       target.__bindings__[targetKey][getUid(this)] = binding;
       if (!noNotify) {
-        return triggerChange(this, key);
+        triggerChange(this, key);
       }
+      return accessor;
     };
 
     MVCObject.prototype.unbind = function(key) {
