@@ -43,7 +43,7 @@
     };
 
     triggerChange = function(target, targetKey) {
-      var bindingName, bindingObj, evt, _base, _ref, _results;
+      var bindingObj, bindingUid, evt, _base, _ref, _results;
       evt = "" + targetKey + "_changed";
       if (target[evt]) {
         target[evt]();
@@ -56,8 +56,8 @@
       (_base = target.__bindings__)[targetKey] || (_base[targetKey] = {});
       _ref = target.__bindings__[targetKey];
       _results = [];
-      for (bindingName in _ref) {
-        bindingObj = _ref[bindingName];
+      for (bindingUid in _ref) {
+        bindingObj = _ref[bindingUid];
         _results.push(triggerChange(bindingObj.target, bindingObj.targetKey));
       }
       return _results;
@@ -144,28 +144,24 @@
       };
       accessor = {
         target: target,
-        targetKey: targetKey,
-        bindingObj: bindingObj
+        targetKey: targetKey
       };
       this.__accessors__[key] = accessor;
-      target.__bindings__[targetKey][getUid(bindingObj)] = bindingObj;
+      target.__bindings__[targetKey][getUid(this)] = bindingObj;
       if (!noNotify) {
         return triggerChange(this, key);
       }
     };
 
     MVCObject.prototype.unbind = function(key) {
-      var accessor, bindingObj, target, targetKey;
+      var accessor, target, targetKey;
       this.__accessors__ || (this.__accessors__ = {});
       accessor = this.__accessors__[key];
       if (accessor) {
-        bindingObj = accessor.bindingObj;
         target = accessor.target;
         targetKey = accessor.targetKey;
-        if (bindingObj) {
-          delete target.__bindings__[targetKey][getUid(bindingObj)];
-        }
         this[key] = this.get(key);
+        delete target.__bindings__[targetKey][getUid(this)];
         return delete this.__accessors__[key];
       }
     };

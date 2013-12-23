@@ -41,7 +41,7 @@ class MVCObject
         target.__bindings__ or= {}
         target.__bindings__[targetKey] or= {}
 
-        for bindingName, bindingObj of target.__bindings__[targetKey]
+        for bindingUid, bindingObj of target.__bindings__[targetKey]
             triggerChange bindingObj.target, bindingObj.targetKey
 
     get: (key)->
@@ -123,10 +123,9 @@ class MVCObject
         accessor =
             target: target
             targetKey: targetKey
-            bindingObj: bindingObj
 
         @__accessors__[key] = accessor
-        target.__bindings__[targetKey][getUid bindingObj] = bindingObj
+        target.__bindings__[targetKey][getUid @] = bindingObj
 
         if not noNotify
             triggerChange @, key
@@ -136,12 +135,10 @@ class MVCObject
         accessor = @__accessors__[key]
 
         if accessor
-            bindingObj = accessor.bindingObj
             target = accessor.target
             targetKey = accessor.targetKey
-            if bindingObj
-                delete target.__bindings__[targetKey][getUid bindingObj]
             @[key] = @get key
+            delete target.__bindings__[targetKey][getUid @]
             delete @__accessors__[key]
 
     unbindAll: ->
