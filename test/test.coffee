@@ -421,7 +421,7 @@ describe 'MVCObject', ->
                           |             |
                           e             f
     ###
-    xit 'more changed', ->
+    it 'more changed', ->
         a = new MVCObject()
         b = new MVCObject()
         c = new MVCObject()
@@ -436,41 +436,62 @@ describe 'MVCObject', ->
         e.bindTo 'k', b
         f.bindTo 'k', c
 
-        a.k_changed = ->
-            console.log 'a: k_changed'
-        b.k_changed = ->
-            console.log 'b: k_changed'
-        c.k_changed = ->
-            console.log 'c: k_changed'
-        d.k_changed = ->
-            console.log 'd: k_changed'
-        e.k_changed = ->
-            console.log 'e: k_changed'
-        f.k_changed = ->
-            console.log 'f: k_changed'
+        aChange = sinon.spy()
+        bChange = sinon.spy()
+        cChange = sinon.spy()
+        dChange = sinon.spy()
+        eChange = sinon.spy()
+        fChange = sinon.spy()
+
+        aSet = sinon.spy()
+        bSet = sinon.spy()
+        cSet = sinon.spy()
+        dSet = sinon.spy()
+        eSet = sinon.spy()
+        fSet = sinon.spy()
+
+        a.k_changed = aChange
+        b.k_changed = bChange
+        c.k_changed = cChange
+        d.k_changed = dChange
+        e.k_changed = eChange
+        f.k_changed = fChange
 
         a.setK = (value)->
-            console.log 'a: setK'
+            aSet()
             @set 'k', value # 理论上不会再向上set, 所以自身调用
 
         b.setK = (value)->
-            console.log 'b: setK'
+            bSet()
             @set 'k', value
 
         c.setK = (value)->
-            console.log 'c: setK'
+            cSet()
             @set 'k', value
 
         d.setK = (value)->
-            console.log 'd: setK'
+            dSet()
             @set 'k', value
 
         e.setK = (value)->
-            console.log 'e: setK'
+            eSet()
             @set 'k', value
 
         f.setK = (value)->
-            console.log 'f: setK'
+            fSet()
             @set 'k', value
 
-        f.set 'k', 1
+        e.set 'k', 1
+
+        eSet.should.not.have.been.called
+
+        bSet.should.have.been.calledBefore cSet
+        cSet.should.have.been.calledBefore dSet
+
+        dChange.should.have.been.calledBefore cChange
+
+        cChange.should.have.been.calledBefore bChange
+        cChange.should.have.been.calledBefore fChange
+
+        bChange.should.have.been.calledBefore aChange
+        bChange.should.have.been.calledBefore eChange
