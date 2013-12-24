@@ -41,7 +41,7 @@ class MVCObject
         target.__bindings__ or= {}
         target.__bindings__[targetKey] or= {}
 
-        for bindingUid, bindingObj of target.__bindings__[targetKey]
+        for own bindingUid, bindingObj of target.__bindings__[targetKey]
             triggerChange bindingObj.target, bindingObj.targetKey
 
     get: (key)->
@@ -105,7 +105,7 @@ class MVCObject
             triggerChange @, key
 
     setValues: (values)->
-        for key, value of values
+        for own key, value of values
             setterName = getSetterName key
             if @[setterName]
                 @[setterName] value
@@ -146,7 +146,7 @@ class MVCObject
     unbindAll: ->
         @__accessors__ or= {}
 
-        for key of @__accessors__
+        for own key of @__accessors__
             @unbind key
 
 class Accessor

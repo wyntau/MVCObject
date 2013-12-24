@@ -5,7 +5,8 @@
 
 
 (function() {
-  var Accessor, MVCObject;
+  var Accessor, MVCObject,
+    __hasProp = {}.hasOwnProperty;
 
   MVCObject = (function() {
     var capitalize, getGetterName, getSetterName, getUid, getterNameCache, setterNameCache, triggerChange, uid;
@@ -57,6 +58,7 @@
       _ref = target.__bindings__[targetKey];
       _results = [];
       for (bindingUid in _ref) {
+        if (!__hasProp.call(_ref, bindingUid)) continue;
         bindingObj = _ref[bindingUid];
         _results.push(triggerChange(bindingObj.target, bindingObj.targetKey));
       }
@@ -126,6 +128,7 @@
       var key, setterName, value, _results;
       _results = [];
       for (key in values) {
+        if (!__hasProp.call(values, key)) continue;
         value = values[key];
         setterName = getSetterName(key);
         if (this[setterName]) {
@@ -168,10 +171,12 @@
     };
 
     MVCObject.prototype.unbindAll = function() {
-      var key, _results;
+      var key, _ref, _results;
       this.__accessors__ || (this.__accessors__ = {});
+      _ref = this.__accessors__;
       _results = [];
-      for (key in this.__accessors__) {
+      for (key in _ref) {
+        if (!__hasProp.call(_ref, key)) continue;
         _results.push(this.unbind(key));
       }
       return _results;
