@@ -1,4 +1,4 @@
-## MVCObject
+## MVCObject [![Build Status](https://travis-ci.org/Jeremial/MVCObject.png)](https://travis-ci.org/Jeremial/MVCObject)
 
 An CoffeeScript implementation of [Google Maps' MVCObject](https://developers.google.com/maps/articles/mvcfun).
 
