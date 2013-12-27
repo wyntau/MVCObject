@@ -1,4 +1,4 @@
-## MVCObject [![Build Status](https://travis-ci.org/Jeremial/MVCObject.png)](https://travis-ci.org/Jeremial/MVCObject) [![Dependencies Status](https://david-dm.org/Jeremial/MVCObject.png)](https://david-dm.org/Jeremial/MVCObject)
+## MVCObject [![NPM version](https://badge.fury.io/js/mvcobject.png)](http://badge.fury.io/js/mvcobject) [![Build Status](https://travis-ci.org/Jeremial/MVCObject.png)](https://travis-ci.org/Jeremial/MVCObject) [![Dependencies Status](https://david-dm.org/Jeremial/MVCObject.png)](https://david-dm.org/Jeremial/MVCObject)
 
 An CoffeeScript implementation of [Google Maps' MVCObject](https://developers.google.com/maps/articles/mvcfun).
 
