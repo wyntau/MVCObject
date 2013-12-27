@@ -4,7 +4,7 @@ An CoffeeScript implementation of [Google Maps' MVCObject](https://developers.go
 
 This is a standalone class - you can use it in any of your JavaScript applications, it doesn't have to be Google Maps related.
 
-![mvcobject](https://nodei.co/npm/mvcobject.png?compact=true)
+[![mvcobject](https://nodei.co/npm/mvcobject.png?compact=true)](https://nodei.co/npm/mvcobject)
 
 ### APIs
 
