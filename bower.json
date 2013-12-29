@@ -1,7 +1,7 @@
 {
   "name": "mvcobject",
   "main": "MVCObject.js",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "homepage": "https://github.com/Jeremial/MVCObject",
   "authors": [
     "Jeremial <jeremial90@gmail.com>"
