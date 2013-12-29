@@ -1,6 +1,6 @@
 ## MVCObject [![NPM version](https://badge.fury.io/js/mvcobject.png)](http://badge.fury.io/js/mvcobject) [![Build Status](https://travis-ci.org/Jeremial/MVCObject.png)](https://travis-ci.org/Jeremial/MVCObject) [![Dependencies Status](https://david-dm.org/Jeremial/MVCObject.png)](https://david-dm.org/Jeremial/MVCObject)
 
-An CoffeeScript implementation of [Google Maps' MVCObject](https://developers.google.com/maps/articles/mvcfun).
+An implementation of [Google Maps' MVCObject](https://developers.google.com/maps/articles/mvcfun) for Node.js and browers.
 
 This is a standalone class - you can use it in any of your JavaScript applications, it doesn't have to be Google Maps related.
 
