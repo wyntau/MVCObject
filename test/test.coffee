@@ -1,4 +1,4 @@
-MVCObject = require '..'
+MVCObject = require '../MVCObject.coffee'
 
 describe 'MVCObject', ->
     it 'model', ->

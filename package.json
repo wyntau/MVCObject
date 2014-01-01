@@ -1,6 +1,6 @@
 {
   "name": "mvcobject",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An implementation of Google Maps' MVCObject for Node.js and browers",
   "main": "MVCObject.js",
   "directories": {
@@ -17,6 +17,10 @@
     "MVCObject"
   ],
   "author": "Jeremial",
+  "contributors": [
+  "Jeremial <jeremial90@gmail.com>",
+  "saidz <zyx.zhuyuxiang@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Jeremial/MVCObject/issues"
