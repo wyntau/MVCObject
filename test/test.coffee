@@ -3,40 +3,37 @@ MVCObject = require '../MVCObject.coffee'
 describe 'MVCObject', ->
     it 'model', ->
         m = new MVCObject()
-        expect(m).to.not.equal null
-        expect(m).to.not.equal undefined
+        should.exist m
 
     it 'GetUndefined', ->
         m = new MVCObject()
-        expect(m.get('k')).to.equal undefined
+        should.not.exist m.get 'k'
 
     it 'GetSetGet', ->
         m = new MVCObject()
-        expect(m.get('k')).to.equal undefined
+        should.not.exist m.get 'k'
         m.set 'k', 1
-        expect(m.get('k')).to.equal 1
+        m.get('k').should.equal 1
 
     it 'SetValues', ->
         m = new MVCObject()
         m.setValues
             k1: 1
             k2: 2
-        expect(m.get('k1')).to.equal 1
-        expect(m.get('k2')).to.equal 2
+        m.get('k1').should.equal 1
+        m.get('k2').should.equal 2
 
     it 'NotifyCallback', ->
         m = new MVCObject()
-        spy = sinon.spy()
-        m.changed = spy
+        m.changed = sinon.spy()
         m.notify 'k'
-        expect(spy.calledOnce).to.be.ok
+        m.changed.should.have.been.calledOnce
 
     it 'NotifyKeyCallback', ->
         m = new MVCObject()
-        spy = sinon.spy()
-        m.k_changed = spy
+        m.k_changed = sinon.spy()
         m.notify 'k'
-        expect(spy.calledOnce).to.be.ok
+        m.k_changed.should.have.been.calledOnce
 
     # it 'NotifyKeyEvent', ->
     #     m = new MVCObject
@@ -47,17 +44,15 @@ describe 'MVCObject', ->
 
     it 'SetNotifyCallback', ->
         m = new MVCObject()
-        spy = sinon.spy()
-        m.changed = spy
+        m.changed = sinon.spy()
         m.set 'k', 1
-        expect(spy.calledOnce).to.be.ok
+        m.changed.should.have.been.calledOnce
 
     it 'SetNotifyKeyCallback', ->
         m = new MVCObject()
-        spy = sinon.spy()
-        m.k_changed = spy
+        m.k_changed = sinon.spy()
         m.set 'k', 1
-        expect(spy.calledOnce).to.be.ok
+        m.k_changed.should.have.been.calledOnce
 
     ###
     bindTo(key, target, targetKey, noNotify):
@@ -70,15 +65,13 @@ describe 'MVCObject', ->
         m = new MVCObject()
         n = new MVCObject()
         p = new MVCObject()
-        spy1 = sinon.spy()
-        spy2 = sinon.spy()
-        n.k_changed = spy1
-        p.k_changed = spy2
+        n.k_changed = sinon.spy()
+        p.k_changed = sinon.spy()
         n.bindTo 'k', m # first invoke
         p.bindTo 'k', m, 'k', true # no first invoke
         m.set 'k', 1 # n second invoke, p first invoke
-        expect(spy1.calledTwice).to.be.ok
-        expect(spy2.calledOnce).to.be.ok
+        n.k_changed.should.have.been.calledTwice
+        p.k_changed.should.have.been.calledOnce
 
     # it 'SetNotifyKeyEvent', ->
     #     m = new MVCObject
@@ -91,32 +84,32 @@ describe 'MVCObject', ->
         m = new MVCObject()
         n = new MVCObject()
         m.set 'k', 1
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal undefined
+        m.get('k').should.equal 1
+        should.not.exist n.get 'k'
         n.bindTo 'k', m
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 1
+        m.get('k').should.equal 1
+        n.get('k').should.equal 1
 
     it 'SetBindTransform', ->
         m = new MVCObject()
         n = new MVCObject()
         m.set 'k', 1
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal undefined
+        m.get('k').should.equal 1
+        should.not.exist n.get 'k'
         n.bindTo('k', m).transform (fromValue)->
             fromValue / 2
         , (toValue)->
             toValue * 2
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 2
+        m.get('k').should.equal 1
+        n.get('k').should.equal 2
 
     it 'BindSet', ->
         m = new MVCObject()
         n = new MVCObject()
         n.bindTo 'k', m
         m.set 'k', 1
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 1
+        m.get('k').should.equal 1
+        n.get('k').should.equal 1
 
     it 'BindSetTransform', ->
         m = new MVCObject()
@@ -126,16 +119,16 @@ describe 'MVCObject', ->
         , (toValue)->
             toValue * 2
         m.set 'k', 1
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 2
+        m.get('k').should.equal 1
+        n.get('k').should.equal 2
 
     it 'BindSetBackwards', ->
         m = new MVCObject()
         n = new MVCObject()
         n.bindTo 'k', m
         n.set 'k', 1
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 1
+        m.get('k').should.equal 1
+        n.get('k').should.equal 1
 
     it 'BindSetBackwardsTransform', ->
         m = new MVCObject()
@@ -145,90 +138,84 @@ describe 'MVCObject', ->
         , (toValue)->
             toValue * 2
         n.set 'k', 2
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 2
+        m.get('k').should.equal 1
+        n.get('k').should.equal 2
 
     it 'SetBindBackwards', ->
         m = new MVCObject()
         n = new MVCObject()
         n.set 'k', 1
         n.bindTo 'k', m
-        expect(m.get('k')).to.equal undefined
-        expect(n.get('k')).to.equal undefined
+        should.not.exist m.get 'k'
+        should.not.exist n.get 'k'
 
     it 'BindSetUnbind', ->
         m = new MVCObject()
         n = new MVCObject()
         n.bindTo 'k', m
         n.set 'k', 1
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 1
+        m.get('k').should.equal 1
+        n.get('k').should.equal 1
         n.unbind 'k'
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 1
+        m.get('k').should.equal 1
+        n.get('k').should.equal 1
         n.set 'k', 2
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 2
+        m.get('k').should.equal 1
+        n.get('k').should.equal 2
 
     it 'UnbindAll', ->
         m = new MVCObject()
         n = new MVCObject()
         n.bindTo 'k', m
         n.set 'k', 1
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 1
+        m.get('k').should.equal 1
+        n.get('k').should.equal 1
         n.unbindAll()
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 1
+        m.get('k').should.equal 1
+        n.get('k').should.equal 1
         n.set 'k', 2
-        expect(m.get('k')).to.equal 1
-        expect(n.get('k')).to.equal 2
+        m.get('k').should.equal 1
+        n.get('k').should.equal 2
 
     it 'BindNotify', ->
         m = new MVCObject()
         n = new MVCObject()
         m.bindTo 'k', n
-        mSpy = sinon.spy()
-        m.k_changed = mSpy
-        nSpy = sinon.spy()
-        n.k_changed = nSpy
+        m.k_changed = sinon.spy()
+        n.k_changed = sinon.spy()
         n.set 'k', 1
-        expect(mSpy.calledOnce).to.be.ok
-        expect(nSpy.calledOnce).to.be.ok
+        m.k_changed.should.have.been.calledOnce
+        n.k_changed.should.have.been.calledOnce
 
     it 'BindBackwardsNotify', ->
         m = new MVCObject()
         n = new MVCObject()
         n.bindTo 'k', m
-        mSpy = sinon.spy()
-        m.k_changed = mSpy
-        nSpy = sinon.spy()
-        n.k_changed = nSpy
+        m.k_changed = sinon.spy()
+        n.k_changed = sinon.spy()
         n.set 'k', 1
-        expect(mSpy.calledOnce).to.be.ok
-        expect(nSpy.calledOnce).to.be.ok
+        m.k_changed.should.have.been.calledOnce
+        n.k_changed.should.have.been.calledOnce
 
     it 'BindRename', ->
         m = new MVCObject()
         n = new MVCObject()
         n.bindTo 'kn', m, 'km'
         m.set 'km', 1
-        expect(m.get('km')).to.equal 1
-        expect(n.get('kn')).to.equal 1
+        m.get('km').should.equal 1
+        n.get('kn').should.equal 1
 
     it 'BindRenameCallbacks', ->
         m = new MVCObject()
         n = new MVCObject()
-        kmSpy = sinon.spy()
-        m.km_changed = kmSpy
-        knSpy = sinon.spy()
-        n.kn_changed = knSpy
+        m.km_changed = sinon.spy()
+        n.kn_changed = sinon.spy()
         n.bindTo 'kn', m, 'km'
         m.set 'km', 1
-        expect(m.get('km')).to.equal 1
-        expect(n.get('kn')).to.equal 1
-        expect(kmSpy.calledOnce).to.be.ok
-        expect(knSpy.calledTwice).to.be.ok
+        m.get('km').should.equal 1
+        n.get('kn').should.equal 1
+        m.km_changed.should.have.been.calledOnce
+        n.kn_changed.should.have.been.calledTwice
 
     it 'TransitiveBindForwards', ->
         m = new MVCObject()
@@ -237,9 +224,9 @@ describe 'MVCObject', ->
         n.bindTo 'kn', m, 'km'
         o.bindTo 'ko', n, 'kn'
         m.set 'km', 1
-        expect(m.get('km')).to.equal 1
-        expect(n.get('kn')).to.equal 1
-        expect(o.get('ko')).to.equal 1
+        m.get('km').should.equal 1
+        n.get('kn').should.equal 1
+        o.get('ko').should.equal 1
 
     it 'TransitiveBindBackwards', ->
         m = new MVCObject()
@@ -248,9 +235,9 @@ describe 'MVCObject', ->
         n.bindTo 'kn', m, 'km'
         o.bindTo 'ko', n, 'kn'
         o.set 'ko', 1
-        expect(m.get('km')).to.equal 1
-        expect(n.get('kn')).to.equal 1
-        expect(o.get('ko')).to.equal 1
+        m.get('km').should.equal 1
+        n.get('kn').should.equal 1
+        o.get('ko').should.equal 1
 
     it 'Inheritance', ->
         spy = sinon.spy()
@@ -258,46 +245,48 @@ describe 'MVCObject', ->
             k_changed: spy
         c = new C()
         c.set 'k', 1
-        expect(c.get('k')).to.equal 1
-        expect(spy.calledOnce).to.equal true
+        c.get('k').should.equal 1
+        spy.should.have.been.calledOnce
 
     it 'MrideyAccessors', ->
         a = new MVCObject()
         a.set 'level', 2
-        expect(a.get('level')).to.equal 2
+        a.get('level').should.equal 2
         b = new MVCObject()
         b.setValues
             level: 2
             index: 3
             description: 'Hello world'
-        expect(b.get('index')).to.equal 3
+        b.get('index').should.equal 3
 
     it 'MrideyBinding', ->
         a = new MVCObject()
         a.set 'level', 2
         b = new MVCObject()
         b.bindTo 'index', a, 'level'
-        expect(b.get('index')).to.equal 2
+        b.get('index').should.equal 2
         a.set 'level', 3
-        expect(b.get('index')).to.equal 3
+        b.get('index').should.equal 3
         b.set 'index', 4
-        expect(a.get('level')).to.equal 4
+        a.get('level').should.equal 4
         c = new MVCObject()
         c.bindTo 'zoom', a, 'level'
-        expect(c.get('zoom')).to.equal 4
+        c.get('zoom').should.equal 4
         b.unbind 'index'
-        expect(b.get('index')).to.equal 4
+        b.get('index').should.equal 4
         c.set 'zoom', 5
-        expect(a.get('level')).to.equal 5
-        expect(b.get('index')).to.equal 4
+        a.get('level').should.equal 5
+        b.get('index').should.equal 4
 
     it 'CircularBind', ->
         a = new MVCObject()
         b = new MVCObject()
         a.bindTo 'k', b
-        expect ->
+        should.throw ->
             b.bindTo 'k', a
-        .to.throw()
+        # expect ->
+        #     b.bindTo 'k', a
+        # .to.throw()
 
     ###
     set(key, value):
@@ -308,25 +297,23 @@ describe 'MVCObject', ->
     it 'Setter', ->
         a = new MVCObject()
         x = undefined
-        spy = sinon.spy()
-        a.setX = spy
+        a.setX = sinon.spy()
         a.set 'x', 1
-        expect(a.get('x')).to.equal 1
-        expect(a.x).to.equal 1 # self[key] = value
-        expect(spy.called).to.not.be.ok # 自己的self[setterName]() 未被调用
+        a.get('x').should.equal 1
+        a.x.should.equal 1 # self[key] = value
+        a.setX.should.not.have.been.called # 自己的self[setterName]() 未被调用
 
     it 'SetterBind', ->
         a = new MVCObject()
-        spy = sinon.spy()
         a.setX = (value)->
             @x = value
-            spy()
+        sinon.spy a, 'setX'
         b = new MVCObject()
         b.bindTo 'x', a
         b.set 'x', 1
-        expect(a.get('x')).to.equal 1
-        expect(b.get('x')).to.equal 1 # 最终调用a.get('x'), 但是a没有getX方法,所以直接返回a.x
-        expect(spy.calledOnce).to.be.ok # a[setterName]() 被调用
+        a.get('x').should.equal 1
+        b.get('x').should.equal 1 # 最终调用a.get('x'), 但是a没有getX方法,所以直接返回a.x
+        a.setX.should.have.been.calledOnce # a[setterName]() 被调用
 
     ###
     get(key):
@@ -337,42 +324,40 @@ describe 'MVCObject', ->
     ###
     it 'Getter', ->
         a = new MVCObject()
-        spy = sinon.spy()
-        a.getX = spy
+        a.getX = sinon.spy()
         a.x = 2
-        expect(a.get('x')).to.equal 2 # 直接返回self[key]
-        expect(spy.called).to.not.be.ok # getterName 未被调用
+        a.get('x').should.equal 2 # 直接返回self[key]
+        a.getX.should.not.have.been.called # getterName 未被调用
 
     it 'GetterBind', ->
         a = new MVCObject()
-        spy = sinon.spy()
         a.getX = ->
-            spy()
             1
+        sinon.spy a, 'getX'
         b = new MVCObject()
         b.bindTo 'x', a
-        expect(b.get('x')).to.equal 1
-        expect(spy.calledOnce).to.be.ok # 当b调用时, a[getterName]被调用一次
+        b.get('x').should.equal 1
+        a.getX.should.have.been.calledOnce
 
     it 'Priority', ->
         a = new MVCObject()
         b = new MVCObject()
         a.set 'k', 1
         b.set 'k', 2
-        expect(a.get('k')).to.equal 1 # 未绑定之前
-        expect(b.get('k')).to.equal 2
+        a.get('k').should.equal 1 # 未绑定之前
+        b.get('k').should.equal 2
         a.bindTo 'k', b
-        expect(a.get('k')).to.equal 2 # 绑定之后
-        expect(b.get('k')).to.equal 2
+        a.get('k').should.equal 2 # 绑定之后
+        b.get('k').should.equal 2
 
     it 'PriorityUndefined', ->
         a = new MVCObject()
         b = new MVCObject()
         a.set 'k', 1
-        expect(a.get('k')).to.equal 1 # 未绑定之前
+        a.get('k').should.equal 1 # 未绑定之前
         a.bindTo 'k', b
-        expect(a.get('k')).to.equal undefined # 绑定之后
-        expect(b.get('k')).to.equal undefined
+        should.not.exist a.get 'k' # 绑定之后
+        should.not.exist b.get 'k'
 
     ###
         a --> b --> c
@@ -400,16 +385,14 @@ describe 'MVCObject', ->
 
     it 'BindSelf', ->
         a = new MVCObject()
-        expect ->
+        should.throw ->
             a.bindTo 'k', a
-        .to.throw()
 
     it 'ChangedKey', ->
         a = new MVCObject()
-        spy = sinon.spy()
-        a.changed = spy
+        a.changed = sinon.spy()
         a.set 'k', 1
-        expect(spy.calledWith('k')).to.be.ok
+        a.changed.should.have.been.calledWith 'k'
 
     ###
     {property}_changed|changed
@@ -430,68 +413,54 @@ describe 'MVCObject', ->
         f = new MVCObject()
 
         a.bindTo 'k', b
-        # f.bindTo 'k', c
         b.bindTo 'k', c
         c.bindTo 'k', d
         e.bindTo 'k', b
         f.bindTo 'k', c
 
-        aChange = sinon.spy()
-        bChange = sinon.spy()
-        cChange = sinon.spy()
-        dChange = sinon.spy()
-        eChange = sinon.spy()
-        fChange = sinon.spy()
-
-        aSet = sinon.spy()
-        bSet = sinon.spy()
-        cSet = sinon.spy()
-        dSet = sinon.spy()
-        eSet = sinon.spy()
-        fSet = sinon.spy()
-
-        a.k_changed = aChange
-        b.k_changed = bChange
-        c.k_changed = cChange
-        d.k_changed = dChange
-        e.k_changed = eChange
-        f.k_changed = fChange
+        a.k_changed = sinon.spy()
+        b.k_changed = sinon.spy()
+        c.k_changed = sinon.spy()
+        d.k_changed = sinon.spy()
+        e.k_changed = sinon.spy()
+        f.k_changed = sinon.spy()
 
         a.setK = (value)->
-            aSet()
             @set 'k', value # 理论上不会再向上set, 所以自身调用
 
         b.setK = (value)->
-            bSet()
             @set 'k', value
 
         c.setK = (value)->
-            cSet()
             @set 'k', value
 
         d.setK = (value)->
-            dSet()
             @set 'k', value
 
         e.setK = (value)->
-            eSet()
             @set 'k', value
 
         f.setK = (value)->
-            fSet()
             @set 'k', value
+
+        sinon.spy a, 'setK'
+        sinon.spy b, 'setK'
+        sinon.spy c, 'setK'
+        sinon.spy d, 'setK'
+        sinon.spy e, 'setK'
+        sinon.spy f, 'setK'
 
         e.set 'k', 1
 
-        eSet.should.not.have.been.called
+        e.setK.should.not.have.been.called
 
-        bSet.should.have.been.calledBefore cSet
-        cSet.should.have.been.calledBefore dSet
+        b.setK.should.have.been.calledBefore c.setK
+        c.setK.should.have.been.calledBefore d.setK
 
-        dChange.should.have.been.calledBefore cChange
+        d.k_changed.should.have.been.calledBefore c.k_changed
 
-        cChange.should.have.been.calledBefore bChange
-        cChange.should.have.been.calledBefore fChange
+        c.k_changed.should.have.been.calledBefore b.k_changed
+        c.k_changed.should.have.been.calledBefore f.k_changed
 
-        bChange.should.have.been.calledBefore aChange
-        bChange.should.have.been.calledBefore eChange
+        b.k_changed.should.have.been.calledBefore a.k_changed
+        b.k_changed.should.have.been.calledBefore e.k_changed
