@@ -1,5 +1,3 @@
-MVCObject = require '../MVCObject.coffee'
-
 describe 'MVCObject', ->
     it 'model', ->
         m = new MVCObject()
