@@ -223,7 +223,7 @@ class Accessor
 # 暴露模块
 if module?
     module.exports = MVCObject
-else if typeof define is 'funciton'
+else if typeof define is 'function'
     define ->
         MVCObject
 else
