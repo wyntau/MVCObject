@@ -287,7 +287,7 @@
 
   if (typeof module !== "undefined" && module !== null) {
     module.exports = MVCObject;
-  } else if (define && define.amd) {
+  } else if (typeof define === 'funciton') {
     define(function() {
       return MVCObject;
     });
