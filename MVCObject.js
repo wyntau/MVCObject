@@ -287,6 +287,10 @@
 
   if (typeof module !== "undefined" && module !== null) {
     module.exports = MVCObject;
+  } else if (define && define.amd) {
+    define(function() {
+      return MVCObject;
+    });
   } else {
     window.MVCObject = MVCObject;
   }

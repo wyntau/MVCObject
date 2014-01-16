@@ -223,5 +223,8 @@ class Accessor
 # 暴露模块
 if module?
     module.exports = MVCObject
+else if define and define.amd
+    define ->
+        MVCObject
 else
     window.MVCObject = MVCObject
