@@ -1,6 +1,6 @@
 {
   "name": "mvcobject",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "An implementation of Google Maps' MVCObject for Node.js and browers",
   "main": "MVCObject.js",
   "directories": {
@@ -28,7 +28,7 @@
   "devDependencies": {
     "mocha": "~1.15.1",
     "chai": "~1.8.1",
-    "coffee-script": "~1.6.3",
+    "coffee-script": "~1.7.1",
     "sinon": "~1.7.3",
     "sinon-chai": "~2.4.0"
   }
