@@ -1,6 +1,6 @@
 {
   "name": "mvcobject",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "An implementation of Google Maps' MVCObject for Node.js and browers",
   "main": "MVCObject.js",
   "directories": {
@@ -11,19 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jeremial/MVCObject.git"
+    "url": "https://github.com/Treri/MVCObject.git"
   },
   "keywords": [
     "MVCObject"
   ],
-  "author": "Jeremial",
+  "author": "Treri",
   "contributors": [
-  "Jeremial <jeremial90@gmail.com>",
+  "Treri <treri.liu@gmail.com>",
   "saidz <zyx.zhuyuxiang@gmail.com>"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Jeremial/MVCObject/issues"
+    "url": "https://github.com/Treri/MVCObject/issues"
   },
   "devDependencies": {
     "mocha": "~1.15.1",
