@@ -1,5 +1,4 @@
 "use strict";
-require('coffee-script').register();
 global.chai      = require('chai');
 global.sinon     = require('sinon');
 global.should    = chai.should();

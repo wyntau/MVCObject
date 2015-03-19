@@ -41,6 +41,12 @@ class MVCObject
     getUid = (obj)->
         obj.__uid__ or= ++uid
 
+    toKey = (key)->
+        "_#{key}"
+
+    bindings = "__bindings__"
+    accessors = "__accessors__"
+
     ###*
      * @description 这个函数的触发需要时机
      * 在一个key所在的终端对象遍历到时触发
@@ -65,10 +71,10 @@ class MVCObject
             target.changed? targetKey
 
         # __bindings__ 持有着直接监听targetKey的对象的相关信息
-        target.__bindings__ or= {}
-        target.__bindings__[targetKey] or= {}
+        target[bindings] or= {}
+        target[bindings][targetKey] or= {}
 
-        for own bindingUid, bindingObj of target.__bindings__[targetKey]
+        for own bindingUid, bindingObj of target[bindings][targetKey]
             triggerChange bindingObj.target, bindingObj.targetKey
 
     ###*
@@ -78,13 +84,13 @@ class MVCObject
     ###
     get: (key)->
         # 遍历绑定到当前对象中是否有对应的key
-        # @__accessors__ 访问器,用来访问存放其他对象中的key
-        @__accessors__ or= {}
+        # @[accessors] 访问器,用来访问存放其他对象中的key
+        @[accessors] or= {}
 
         # 检测是否有访问器,如果有执行相应的逻辑,通过访问器在依赖链中获取对应的值
         # 否则当前对象是持有key的终端对象，直接返回
-        if @__accessors__.hasOwnProperty key
-            accessor = @__accessors__[key]
+        if @[accessors].hasOwnProperty key
+            accessor = @[accessors][key]
             targetKey = accessor.targetKey
             target = accessor.target
             getterName = getGetterName targetKey
@@ -96,8 +102,8 @@ class MVCObject
                 value = target.get targetKey
             if accessor.to
                 value = accessor.to value
-        else if @hasOwnProperty key
-            value = @[key]
+        else if @hasOwnProperty toKey(key)
+            value = @[toKey(key)]
 
         value
 
@@ -109,12 +115,12 @@ class MVCObject
      * @return {void}
     ###
     set: (key, value)->
-        @__accessors__ or= {}
+        @[accessors] or= {}
 
         # 检测访问器中是否有对应的目标对象，有则执行相应逻辑进入目标对象中进行设置
         # 否则当前对象就是持有对象，设置并广播事件
-        if @__accessors__.hasOwnProperty key
-            accessor = @__accessors__[key]
+        if @[accessors].hasOwnProperty key
+            accessor = @[accessors][key]
             targetKey = accessor.targetKey
             target = accessor.target
             setterName = getSetterName targetKey
@@ -128,7 +134,7 @@ class MVCObject
             # MVCObject默认的set方法
                 target.set targetKey, value
         else
-            @[key] = value
+            @[toKey(key)] = value
             triggerChange @, key
 
     ###*
@@ -142,10 +148,10 @@ class MVCObject
      * @return {void}
     ###
     notify: (key)->
-        @__accessors__ or= {}
+        @[accessors] or= {}
 
-        if @__accessors__.hasOwnProperty key
-            accessor = @__accessors__[key]
+        if @[accessors].hasOwnProperty key
+            accessor = @[accessors][key]
             targetKey = accessor.targetKey
             target = accessor.target
             target.notify targetKey
@@ -172,11 +178,11 @@ class MVCObject
         @unbind key
 
         # 访问器字典
-        @__accessors__ or= {}
+        @[accessors] or= {}
         #this->
         # 广播对象字典
-        target.__bindings__ or= {}
-        target.__bindings__[targetKey] or= {}
+        target[bindings] or= {}
+        target[bindings][targetKey] or= {}
 
         # 自身作为目标对象时,所持有广播key change 事件时需要通知的对象的信息
         binding = new Accessor @, key
@@ -184,8 +190,8 @@ class MVCObject
         # 当前对象的一个访问器，持有用来访问目标对象的信息
         accessor = new Accessor target, targetKey
 
-        @__accessors__[key] = accessor
-        target.__bindings__[targetKey][getUid @] = binding
+        @[accessors][key] = accessor
+        target[bindings][targetKey][getUid @] = binding
 
         if not noNotify
             triggerChange @, key
@@ -198,20 +204,20 @@ class MVCObject
      * @return {void}
     ###
     unbind: (key)->
-        @__accessors__ or= {}
-        accessor = @__accessors__[key]
+        @[accessors] or= {}
+        accessor = @[accessors][key]
 
         if accessor
             target = accessor.target
             targetKey = accessor.targetKey
-            @[key] = @get key
-            delete target.__bindings__[targetKey][getUid @]
-            delete @__accessors__[key]
+            @[toKey(key)] = @get key
+            delete target[bindings][targetKey][getUid @]
+            delete @[accessors][key]
 
     unbindAll: ->
-        @__accessors__ or= {}
+        @[accessors] or= {}
 
-        for own key of @__accessors__
+        for own key of @[accessors]
             @unbind key
 
 class Accessor
