@@ -1,10 +1,10 @@
 {
   "name": "mvcobject",
   "main": "MVCObject.js",
-  "version": "0.2.0",
-  "homepage": "https://github.com/Jeremial/MVCObject",
+  "version": "0.2.1",
+  "homepage": "https://github.com/Treri/MVCObject",
   "authors": [
-    "Jeremial <jeremial90@gmail.com>"
+    "Treri <treri.liu@gmail.com>"
   ],
   "description": "An implementation of Google Maps' MVCObject for Node.js and browers",
   "keywords": [
