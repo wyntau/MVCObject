@@ -10,14 +10,14 @@ This is a standalone class - you can use it in any of your JavaScript applicatio
 
 Methods | Return Value | Description
 ----- | ----- | -----
-bindTo(key:string, target:MVCObject, targetKey?:string, noNotify?:boolean) | None | Binds a View to a Model.
-changed(key:string) | None | Generic handler for state changes. Override this in derived classes to handle arbitrary state changes.
+bindTo(key:string, target:MVCObject, targetKey?:string, noNotify?:boolean) | accessor | Binds a View to a Model.
+changed(key:string) | ? | Generic handler for state changes. Override this in derived classes to handle arbitrary state changes.
 get(key:string) | * | Gets a value.
-notify(key:string) | None | Notify all observers of a change on this property. This notifies both objects that are bound to the object's property as well as the object that it is bound to.
-set(key:string, value:*) | None | Sets a value.
-setValues(values:Object) | None | Sets a collection of key-value pairs.
-unbind(key:string) | None | Removes a binding. Unbinding will set the unbound property to the current value. The object will not be notified, as the value has not changed.
-unbindAll() | None | Removes all bindings.
+notify(key:string) | this | Notify all observers of a change on this property. This notifies both objects that are bound to the object's property as well as the object that it is bound to.
+set(key:string, value:*) | this | Sets a value.
+setValues(values:Object) | this | Sets a collection of key-value pairs.
+unbind(key:string) | this | Removes a binding. Unbinding will set the unbound property to the current value. The object will not be notified, as the value has not changed.
+unbindAll() | this | Removes all bindings.
 
 ### Usage
 0. Install

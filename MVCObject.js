@@ -162,14 +162,15 @@
           value = accessor.from(value);
         }
         if (target[setterName]) {
-          return target[setterName](value);
+          target[setterName](value);
         } else {
-          return target.set(targetKey, value);
+          target.set(targetKey, value);
         }
       } else {
         this[toKey(key)] = value;
-        return triggerChange(this, key);
+        triggerChange(this, key);
       }
+      return this;
     };
 
 
@@ -193,26 +194,26 @@
         accessor = this[accessors][key];
         targetKey = accessor.targetKey;
         target = accessor.target;
-        return target.notify(targetKey);
+        target.notify(targetKey);
       } else {
-        return triggerChange(this, key);
+        triggerChange(this, key);
       }
+      return this;
     };
 
     MVCObject.prototype.setValues = function(values) {
-      var key, results, setterName, value;
-      results = [];
+      var key, setterName, value;
       for (key in values) {
         if (!hasProp.call(values, key)) continue;
         value = values[key];
         setterName = getSetterName(key);
         if (this[setterName]) {
-          results.push(this[setterName](value));
+          this[setterName](value);
         } else {
-          results.push(this.set(key, value));
+          this.set(key, value);
         }
       }
-      return results;
+      return this;
     };
 
 
@@ -257,20 +258,20 @@
         targetKey = accessor.targetKey;
         this[toKey(key)] = this.get(key);
         delete target[bindings][targetKey][getUid(this)];
-        return delete this[accessors][key];
+        delete this[accessors][key];
       }
+      return this;
     };
 
     MVCObject.prototype.unbindAll = function() {
-      var key, ref, results;
+      var key, ref;
       this[accessors] || (this[accessors] = {});
       ref = this[accessors];
-      results = [];
       for (key in ref) {
         if (!hasProp.call(ref, key)) continue;
-        results.push(this.unbind(key));
+        this.unbind(key);
       }
-      return results;
+      return this;
     };
 
     return MVCObject;

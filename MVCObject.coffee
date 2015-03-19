@@ -137,6 +137,8 @@ class MVCObject
             @[toKey(key)] = value
             triggerChange @, key
 
+        @
+
     ###*
      * @description 没个MVCObject对象各自的响应对应的key值变化时的逻辑
     ###
@@ -158,6 +160,8 @@ class MVCObject
         else
             triggerChange @, key
 
+        @
+
     setValues: (values)->
         for own key, value of values
             setterName = getSetterName key
@@ -165,6 +169,8 @@ class MVCObject
                 @[setterName] value
             else
                 @set key, value
+
+        @
 
     ###*
      * @description 将当前对象的一个key与目标对象的targetKey建立监听和广播关系
@@ -214,11 +220,15 @@ class MVCObject
             delete target[bindings][targetKey][getUid @]
             delete @[accessors][key]
 
+        @
+
     unbindAll: ->
         @[accessors] or= {}
 
         for own key of @[accessors]
             @unbind key
+
+        @
 
 class Accessor
     constructor: (@target, @targetKey)->
