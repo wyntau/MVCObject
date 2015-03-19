@@ -61,7 +61,7 @@ Thanks to @twpayne, the test suites are based on his [mvcobject_test.js](https:/
 ### LICENSE
 The MIT License (MIT)
 
-Copyright (c) 2013 Treri treri.liu@gmail.com
+Copyright (c) 2013-2015 Treri treri.liu@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
