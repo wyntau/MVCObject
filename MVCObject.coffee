@@ -77,6 +77,8 @@ class MVCObject
         for own bindingUid, bindingObj of target[bindings][targetKey]
             triggerChange bindingObj.target, bindingObj.targetKey
 
+        true
+
     ###*
      * @description 从依赖链中获取对应key的值
      * @param {String} key 关键值

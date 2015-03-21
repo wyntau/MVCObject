@@ -86,7 +86,7 @@
      */
 
     triggerChange = function(target, targetKey) {
-      var base, bindingObj, bindingUid, evt, ref, results;
+      var base, bindingObj, bindingUid, evt, ref;
       evt = targetKey + "_changed";
 
       /**
@@ -103,13 +103,12 @@
       target[bindings] || (target[bindings] = {});
       (base = target[bindings])[targetKey] || (base[targetKey] = {});
       ref = target[bindings][targetKey];
-      results = [];
       for (bindingUid in ref) {
         if (!hasProp.call(ref, bindingUid)) continue;
         bindingObj = ref[bindingUid];
-        results.push(triggerChange(bindingObj.target, bindingObj.targetKey));
+        triggerChange(bindingObj.target, bindingObj.targetKey);
       }
-      return results;
+      return true;
     };
 
 
