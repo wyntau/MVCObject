@@ -86,7 +86,7 @@
      */
 
     triggerChange = function(target, targetKey) {
-      var base, bindingObj, bindingUid, evt, ref;
+      var bindingObj, bindingUid, evt, ref;
       evt = targetKey + "_changed";
 
       /**
@@ -100,13 +100,13 @@
           target.changed(targetKey);
         }
       }
-      target[bindings] || (target[bindings] = {});
-      (base = target[bindings])[targetKey] || (base[targetKey] = {});
-      ref = target[bindings][targetKey];
-      for (bindingUid in ref) {
-        if (!hasProp.call(ref, bindingUid)) continue;
-        bindingObj = ref[bindingUid];
-        triggerChange(bindingObj.target, bindingObj.targetKey);
+      if (target[bindings] && target[bindings][targetKey]) {
+        ref = target[bindings][targetKey];
+        for (bindingUid in ref) {
+          if (!hasProp.call(ref, bindingUid)) continue;
+          bindingObj = ref[bindingUid];
+          triggerChange(bindingObj.target, bindingObj.targetKey);
+        }
       }
       return true;
     };
@@ -120,8 +120,7 @@
 
     MVCObject.prototype.get = function(key) {
       var accessor, getterName, target, targetKey, value;
-      this[accessors] || (this[accessors] = {});
-      if (this[accessors].hasOwnProperty(key)) {
+      if (this[accessors] && this[accessors].hasOwnProperty(key)) {
         accessor = this[accessors][key];
         targetKey = accessor.targetKey;
         target = accessor.target;
@@ -151,8 +150,7 @@
 
     MVCObject.prototype.set = function(key, value) {
       var accessor, setterName, target, targetKey;
-      this[accessors] || (this[accessors] = {});
-      if (this[accessors].hasOwnProperty(key)) {
+      if (this[accessors] && this[accessors].hasOwnProperty(key)) {
         accessor = this[accessors][key];
         targetKey = accessor.targetKey;
         target = accessor.target;
@@ -188,8 +186,7 @@
 
     MVCObject.prototype.notify = function(key) {
       var accessor, target, targetKey;
-      this[accessors] || (this[accessors] = {});
-      if (this[accessors].hasOwnProperty(key)) {
+      if (this[accessors] && this[accessors].hasOwnProperty(key)) {
         accessor = this[accessors][key];
         targetKey = accessor.targetKey;
         target = accessor.target;
@@ -250,25 +247,27 @@
 
     MVCObject.prototype.unbind = function(key) {
       var accessor, target, targetKey;
-      this[accessors] || (this[accessors] = {});
-      accessor = this[accessors][key];
-      if (accessor) {
-        target = accessor.target;
-        targetKey = accessor.targetKey;
-        this[toKey(key)] = this.get(key);
-        delete target[bindings][targetKey][getUid(this)];
-        delete this[accessors][key];
+      if (this[accessors]) {
+        accessor = this[accessors][key];
+        if (accessor) {
+          target = accessor.target;
+          targetKey = accessor.targetKey;
+          this[toKey(key)] = this.get(key);
+          delete target[bindings][targetKey][getUid(this)];
+          delete this[accessors][key];
+        }
       }
       return this;
     };
 
     MVCObject.prototype.unbindAll = function() {
       var key, ref;
-      this[accessors] || (this[accessors] = {});
-      ref = this[accessors];
-      for (key in ref) {
-        if (!hasProp.call(ref, key)) continue;
-        this.unbind(key);
+      if (this[accessors]) {
+        ref = this[accessors];
+        for (key in ref) {
+          if (!hasProp.call(ref, key)) continue;
+          this.unbind(key);
+        }
       }
       return this;
     };

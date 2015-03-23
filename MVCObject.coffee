@@ -71,11 +71,9 @@ class MVCObject
             target.changed? targetKey
 
         # __bindings__ 持有着直接监听targetKey的对象的相关信息
-        target[bindings] or= {}
-        target[bindings][targetKey] or= {}
-
-        for own bindingUid, bindingObj of target[bindings][targetKey]
-            triggerChange bindingObj.target, bindingObj.targetKey
+        if target[bindings] and target[bindings][targetKey]
+            for own bindingUid, bindingObj of target[bindings][targetKey]
+                triggerChange bindingObj.target, bindingObj.targetKey
 
         true
 
@@ -87,11 +85,10 @@ class MVCObject
     get: (key)->
         # 遍历绑定到当前对象中是否有对应的key
         # @[accessors] 访问器,用来访问存放其他对象中的key
-        @[accessors] or= {}
 
         # 检测是否有访问器,如果有执行相应的逻辑,通过访问器在依赖链中获取对应的值
         # 否则当前对象是持有key的终端对象，直接返回
-        if @[accessors].hasOwnProperty key
+        if @[accessors] and @[accessors].hasOwnProperty key
             accessor = @[accessors][key]
             targetKey = accessor.targetKey
             target = accessor.target
@@ -117,11 +114,9 @@ class MVCObject
      * @return {void}
     ###
     set: (key, value)->
-        @[accessors] or= {}
-
         # 检测访问器中是否有对应的目标对象，有则执行相应逻辑进入目标对象中进行设置
         # 否则当前对象就是持有对象，设置并广播事件
-        if @[accessors].hasOwnProperty key
+        if @[accessors] and @[accessors].hasOwnProperty key
             accessor = @[accessors][key]
             targetKey = accessor.targetKey
             target = accessor.target
@@ -152,9 +147,7 @@ class MVCObject
      * @return {void}
     ###
     notify: (key)->
-        @[accessors] or= {}
-
-        if @[accessors].hasOwnProperty key
+        if @[accessors] and @[accessors].hasOwnProperty key
             accessor = @[accessors][key]
             targetKey = accessor.targetKey
             target = accessor.target
@@ -212,23 +205,21 @@ class MVCObject
      * @return {void}
     ###
     unbind: (key)->
-        @[accessors] or= {}
-        accessor = @[accessors][key]
+        if @[accessors]
+            accessor = @[accessors][key]
 
-        if accessor
-            target = accessor.target
-            targetKey = accessor.targetKey
-            @[toKey(key)] = @get key
-            delete target[bindings][targetKey][getUid @]
-            delete @[accessors][key]
-
+            if accessor
+                target = accessor.target
+                targetKey = accessor.targetKey
+                @[toKey(key)] = @get key
+                delete target[bindings][targetKey][getUid @]
+                delete @[accessors][key]
         @
 
     unbindAll: ->
-        @[accessors] or= {}
-
-        for own key of @[accessors]
-            @unbind key
+        if @[accessors]
+            for own key of @[accessors]
+                @unbind key
 
         @
 
