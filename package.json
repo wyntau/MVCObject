@@ -26,11 +26,11 @@
     "url": "https://github.com/Treri/MVCObject/issues"
   },
   "devDependencies": {
-    "chai": "~2.1.2",
+    "chai": "~2.2.0",
     "coffee-script": "~1.9.1",
-    "mocha": "~2.2.1",
+    "mocha": "~2.2.3",
     "sinon": "~1.14.1",
     "sinon-chai": "~2.7.0",
-    "uglify-js": "^2.4.17"
+    "uglify-js": "^2.4.19"
   }
 }
