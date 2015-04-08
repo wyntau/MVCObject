@@ -22,20 +22,10 @@
     var accessors = '__accessors__';
     var uid = '__uid__';
 
-    /**
-     * @description  是传入的字符串首字母大写
-     * @param {String} str 初始值
-     * @return {String}  首字符大写后的结果值
-     */
     function capitalize(str){
       return str.substr(0, 1).toUpperCase() + str.substr(1);
     }
 
-    /**
-     * @description  获取uid
-     * @param {Object} obj 要获取uid 的对象
-     * @return {Number}
-     */
     function getUid(obj){
       return obj[uid] || (obj[uid] = ++uuid);
     }
@@ -44,11 +34,6 @@
       return '_' + key;
     }
 
-    /**
-     * @description 获取当前对象中给对应key对应的set方法
-     * @param {String} key 关键字
-     * @return {void}
-     */
     function getGetterName(key){
       if(getterNameCache.hasOwnProperty(key)){
         return getterNameCache[key];
@@ -74,7 +59,6 @@
      * @param target {MVCObject} 继承了MVCObject的对象
      * @param targetKey {String} 当前对象中被监听的字段
      * @return {void}
-     *
      */
     function triggerChange(target, targetKey){
       var evt = targetKey + '_changed';
@@ -107,7 +91,7 @@
     /**
      * @description 从依赖链中获取对应key的值
      * @param {String} key 关键值
-     * @return {String} 对应的值
+     * @return {mixed} 对应的值
      */
     proto.get = function(key){
       var self = this;
@@ -136,7 +120,7 @@
      * 有三个分支
      * @param {String} key 关键值
      * @param {all} value 要给key设定的值,可以是所有类型
-     * @return {void}
+     * @return {this}
      */
     proto.set = function(key, value){
       var self = this;
@@ -168,7 +152,7 @@
     /**
      * @description 手动触发对应key的事件传播
      * @param {String} key 关键值
-     * @return {void}
+     * @return {this}
      */
     proto.notify = function(key){
       var self = this;
@@ -206,6 +190,7 @@
      * @param target {Object} 目标对象
      * @param tarrgetKey {String} 目标对象上的key
      * @param noNotify {Boolean}
+     * @return {Accessor}
      */
     proto.bindTo = function(key, target, targetKey, noNotify){
       targetKey || (targetKey = key);
@@ -233,7 +218,7 @@
     /**
      * @description 解除当前对象上key与目标对象的监听
      * @param {String} key 关键字
-     * @return {void}
+     * @return {this}
      */
     proto.unbind = function(key){
       var self = this;
