@@ -1,14 +1,16 @@
 {
   "name": "mvcobject",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "description": "An implementation of Google Maps' MVCObject for Node.js and browers",
   "main": "MVCObject.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "mocha",
+    "build": "tsc -d -m umd MVCObject.ts && uglifyjs -m -c -o MVCObject.min.js -- MVCObject.js"
   },
+  "types": "MVCObject.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Treri/MVCObject.git"
@@ -31,6 +33,7 @@
     "mocha": "~2.2.3",
     "sinon": "~1.14.1",
     "sinon-chai": "~2.7.0",
+    "typescript": "^2.0.3",
     "uglify-js": "^2.4.19"
   }
 }

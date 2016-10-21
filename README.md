@@ -21,47 +21,33 @@ unbindAll() | this | Removes all bindings.
 
 ### Usage
 0. Install
-    - npm
 
-            npm install mvcobject
+    ```bash
+    npm install mvcobject
+    ```
 
-    - bower
+1. ES6
 
-            bower install mvcobject
+    ```js
+    import {MVCObject} from 'MVCObject'
 
-1. CoffeeScript in Node.js
-
-        MVCObject = require 'mvcobject'
-
-        class class1 extends MVCObject
-            constructor: ->
-                ...
-
-2. JavaScript in Node.js
-
-        var MVCObject = require('mvcobject');
-
-        function class1(){}
-        class1.prototype = new MVCObject();
-
-3. JavaScript in Browsers
-
-        <!-- include the MVCObject.js -->
-        <script src="/path/to/MVCObject.js"></script>
-
-        function class1(){}
-        class1.prototype = new MVCObject();
+    class Foo extends MVCObject{
+        constructor(){
+            super()
+        }
+    }
+    ```
 
 ### test
 Thanks to @twpayne, the test suites are based on his [mvcobject_test.js](https://github.com/twpayne/mvcobject/blob/master/src/mvc/mvcobject_test.js).
 
     npm install
-    make test
+    npm run test
 
 ### LICENSE
 The MIT License (MIT)
 
-Copyright (c) 2013-2015 Treri treri.liu@gmail.com
+Copyright (c) 2013-2016 Treri treri.liu@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
