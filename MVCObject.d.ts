@@ -49,3 +49,4 @@ export declare class MVCObject {
     unbind(key: string): MVCObject;
     unbindAll(): MVCObject;
 }
+export default MVCObject;

@@ -248,4 +248,6 @@
         return MVCObject;
     }());
     exports.MVCObject = MVCObject;
+    exports.__esModule = true;
+    exports["default"] = MVCObject;
 });

@@ -241,3 +241,5 @@ export class MVCObject{
     return self;
   }
 }
+
+export default MVCObject;
