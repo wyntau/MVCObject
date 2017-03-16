@@ -1,6 +1,6 @@
 {
   "name": "mvcobject",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "An implementation of Google Maps' MVCObject for Node.js and browers",
   "main": "MVCObject.js",
   "directories": {

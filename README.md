@@ -20,22 +20,25 @@ unbind(key:string) | this | Removes a binding. Unbinding will set the unbound pr
 unbindAll() | this | Removes all bindings.
 
 ### Usage
-0. Install
 
-    ```bash
-    npm install mvcobject
-    ```
-
-1. ES6
+- ES6
 
     ```js
-    import {MVCObject} from 'MVCObject'
+    import MVCObject from 'mvcobject'
 
     class Foo extends MVCObject{
         constructor(){
             super()
         }
     }
+    ```
+
+- ES5
+
+    ```js
+    var MVCObject = require('mvcobject').MVCObject;
+    function Foo(){}
+    Foo.prototype = new MVCObject();
     ```
 
 ### test
