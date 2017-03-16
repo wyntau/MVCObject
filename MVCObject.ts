@@ -187,7 +187,7 @@ export class MVCObject{
    * @param noNotify {Boolean}
    * @return {Accessor}
    */
-  bindTo(key: string, target: MVCObject, targetKey: string = key, noNotify: boolean): Accessor{
+  bindTo(key: string, target: MVCObject, targetKey: string = key, noNotify?: boolean): Accessor{
     var self = this;
     self.unbind(key);
 

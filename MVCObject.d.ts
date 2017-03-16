@@ -40,7 +40,7 @@ export declare class MVCObject {
      * @param noNotify {Boolean}
      * @return {Accessor}
      */
-    bindTo(key: string, target: MVCObject, targetKey: string, noNotify: boolean): Accessor;
+    bindTo(key: string, target: MVCObject, targetKey?: string, noNotify?: boolean): Accessor;
     /**
      * @description 解除当前对象上key与目标对象的监听
      * @param {String} key 关键字
