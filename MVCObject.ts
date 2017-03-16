@@ -4,17 +4,17 @@ export class Accessor{
 
 let getterNameCache = {};
 let setterNameCache = {};
-let uuid = 0;
+let ooid = 0;
 let bindings = '__bindings__';
 let accessors = '__accessors__';
-let uid = '__uid__';
+let oid = '__oid__';
 
 function capitalize(str: string) {
   return str.substr(0, 1).toUpperCase() + str.substr(1);
 }
 
-function getUid(obj: MVCObject) {
-  return obj[uid] || (obj[uid] = ++uuid);
+function getOid(obj: MVCObject) {
+  return obj[oid] || (obj[oid] = ++ooid);
 }
 
 function toKey(key: string) {
@@ -184,7 +184,7 @@ export class MVCObject{
     var accessor = new Accessor(target, targetKey);
 
     self[accessors][key] = accessor;
-    target[bindings][targetKey][getUid(self)] = binding;
+    target[bindings][targetKey][getOid(self)] = binding;
 
     if (!noNotify) {
       triggerChange(self, key);
@@ -206,7 +206,7 @@ export class MVCObject{
         var target = accessor.target;
         var targetKey = accessor.targetKey;
         self[toKey(key)] = self.get(key);
-        delete target[bindings][targetKey][getUid(self)];
+        delete target[bindings][targetKey][getOid(self)];
         delete self[accessors][key];
       }
     }
