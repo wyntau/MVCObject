@@ -5,9 +5,9 @@ export class Accessor{
 let getterNameCache = {};
 let setterNameCache = {};
 let ooid = 0;
-let bindings = '__bindings__';
-let accessors = '__accessors__';
-let oid = '__oid__';
+let bindings = '__o_bindings';
+let accessors = '__o_accessors';
+let oid = '__o_oid';
 
 function capitalize(str: string) {
   return str.substr(0, 1).toUpperCase() + str.substr(1);
