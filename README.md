@@ -10,7 +10,7 @@ This is a standalone class - you can use it in any of your JavaScript applicatio
 
 Methods | Return Value | Description
 ----- | ----- | -----
-bindTo(key:string, target:MVCObject, targetKey?:string, noNotify?:boolean) | accessor | Binds a View to a Model.
+bindTo(key:string, target:MVCObject, targetKey?:string, noNotify?:boolean) | this | Binds a View to a Model.
 changed(key:string) | ? | Generic handler for state changes. Override this in derived classes to handle arbitrary state changes.
 get(key:string) | * | Gets a value.
 notify(key:string) | this | Notify all observers of a change on this property. This notifies both objects that are bound to the object's property as well as the object that it is bound to.

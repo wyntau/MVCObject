@@ -105,21 +105,6 @@ describe('MVCObject', function () {
         n.get('k').should.equal(1);
     });
 
-    it('SetBindTransform', function () {
-        var m = new MVCObject();
-        var n = new MVCObject();
-        m.set('k', 1);
-        m.get('k').should.equal(1);
-        should.not.exist(n.get('k'));
-        n.bindTo('k', m).transform(function (fromValue) {
-            return fromValue / 2
-        }, function (toValue) {
-            return toValue * 2
-        });
-        m.get('k').should.equal(1);
-        n.get('k').should.equal(2);
-    });
-
     it('BindSet', function () {
         var m = new MVCObject();
         var n = new MVCObject();
@@ -129,19 +114,6 @@ describe('MVCObject', function () {
         n.get('k').should.equal(1);
     });
 
-    it('BindSetTransform', function () {
-        var m = new MVCObject();
-        var n = new MVCObject();
-        n.bindTo('k', m).transform(function (fromValue) {
-            return fromValue / 2
-        }, function (toValue) {
-            return toValue * 2
-        });
-        m.set('k', 1);
-        m.get('k').should.equal(1);
-        n.get('k').should.equal(2);
-    });
-
     it('BindSetBackwards', function () {
         var m = new MVCObject();
         var n = new MVCObject();
@@ -149,19 +121,6 @@ describe('MVCObject', function () {
         n.set('k', 1);
         m.get('k').should.equal(1);
         n.get('k').should.equal(1);
-    });
-
-    it('BindSetBackwardsTransform', function () {
-        var m = new MVCObject();
-        var n = new MVCObject();
-        n.bindTo('k', m).transform(function (fromValue) {
-            return fromValue / 2
-        }, function (toValue) {
-            return toValue * 2
-        });;
-        n.set('k', 2);
-        m.get('k').should.equal(1);
-        n.get('k').should.equal(2);
     });
 
     it('SetBindBackwards', function () {

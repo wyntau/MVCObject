@@ -1,14 +1,5 @@
 export class Accessor{
-  from: Function;
-  to: Function;
-
   constructor(public target: MVCObject, public targetKey: string){};
-
-  transform(from: Function, to: Function){
-    this.from = from;
-    this.to = to;
-    this.target.notify(this.targetKey);
-  }
 }
 
 let getterNameCache = {};
@@ -101,9 +92,6 @@ export class MVCObject{
       } else {
         value = target.get(targetKey);
       }
-      if (accessor.to) {
-        value = accessor.to(value);
-      }
     } else if (self.hasOwnProperty(toKey(key))) {
       value = self[toKey(key)];
     }
@@ -124,9 +112,6 @@ export class MVCObject{
       var targetKey = accessor.targetKey;
       var target = accessor.target;
       var setterName = getSetterName(targetKey);
-      if (accessor.from) {
-        value = accessor.from(value);
-      }
       if (target[setterName]) {
         target[setterName](value);
       } else {
@@ -187,7 +172,7 @@ export class MVCObject{
    * @param noNotify {Boolean}
    * @return {Accessor}
    */
-  bindTo(key: string, target: MVCObject, targetKey: string = key, noNotify?: boolean): Accessor{
+  bindTo(key: string, target: MVCObject, targetKey: string = key, noNotify?: boolean): MVCObject{
     var self = this;
     self.unbind(key);
 
@@ -205,7 +190,7 @@ export class MVCObject{
       triggerChange(self, key);
     }
 
-    return accessor;
+    return self;
   }
 
   /**
