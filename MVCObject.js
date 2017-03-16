@@ -15,25 +15,20 @@
             this.targetKey = targetKey;
         }
         ;
-        Accessor.prototype.transform = function (from, to) {
-            this.from = from;
-            this.to = to;
-            this.target.notify(this.targetKey);
-        };
         return Accessor;
     }());
     exports.Accessor = Accessor;
     var getterNameCache = {};
     var setterNameCache = {};
-    var uuid = 0;
-    var bindings = '__bindings__';
-    var accessors = '__accessors__';
-    var uid = '__uid__';
+    var ooid = 0;
+    var bindings = '__o_bindings';
+    var accessors = '__o_accessors';
+    var oid = '__o_oid';
     function capitalize(str) {
         return str.substr(0, 1).toUpperCase() + str.substr(1);
     }
-    function getUid(obj) {
-        return obj[uid] || (obj[uid] = ++uuid);
+    function getOid(obj) {
+        return obj[oid] || (obj[oid] = ++ooid);
     }
     function toKey(key) {
         return '_' + key;
@@ -109,9 +104,6 @@
                 else {
                     value = target.get(targetKey);
                 }
-                if (accessor.to) {
-                    value = accessor.to(value);
-                }
             }
             else if (self.hasOwnProperty(toKey(key))) {
                 value = self[toKey(key)];
@@ -132,9 +124,6 @@
                 var targetKey = accessor.targetKey;
                 var target = accessor.target;
                 var setterName = getSetterName(targetKey);
-                if (accessor.from) {
-                    value = accessor.from(value);
-                }
                 if (target[setterName]) {
                     target[setterName](value);
                 }
@@ -210,11 +199,11 @@
             var binding = new Accessor(self, key);
             var accessor = new Accessor(target, targetKey);
             self[accessors][key] = accessor;
-            target[bindings][targetKey][getUid(self)] = binding;
+            target[bindings][targetKey][getOid(self)] = binding;
             if (!noNotify) {
                 triggerChange(self, key);
             }
-            return accessor;
+            return self;
         };
         /**
          * @description 解除当前对象上key与目标对象的监听
@@ -229,7 +218,7 @@
                     var target = accessor.target;
                     var targetKey = accessor.targetKey;
                     self[toKey(key)] = self.get(key);
-                    delete target[bindings][targetKey][getUid(self)];
+                    delete target[bindings][targetKey][getOid(self)];
                     delete self[accessors][key];
                 }
             }

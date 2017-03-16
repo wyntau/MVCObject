@@ -1,10 +1,7 @@
 export declare class Accessor {
     target: MVCObject;
     targetKey: string;
-    from: Function;
-    to: Function;
     constructor(target: MVCObject, targetKey: string);
-    transform(from: Function, to: Function): void;
 }
 export declare class MVCObject {
     /**
@@ -40,7 +37,7 @@ export declare class MVCObject {
      * @param noNotify {Boolean}
      * @return {Accessor}
      */
-    bindTo(key: string, target: MVCObject, targetKey?: string, noNotify?: boolean): Accessor;
+    bindTo(key: string, target: MVCObject, targetKey?: string, noNotify?: boolean): MVCObject;
     /**
      * @description 解除当前对象上key与目标对象的监听
      * @param {String} key 关键字
