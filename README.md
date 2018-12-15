@@ -1,4 +1,4 @@
-## MVCObject [![NPM version](https://badge.fury.io/js/mvcobject.png)](http://badge.fury.io/js/mvcobject) [![Build Status](https://travis-ci.org/Treri/MVCObject.png)](https://travis-ci.org/Treri/MVCObject) [![Dependencies Status](https://david-dm.org/Treri/MVCObject.png)](https://david-dm.org/Treri/MVCObject)
+## MVCObject [![NPM version](https://badge.fury.io/js/mvcobject.png)](http://badge.fury.io/js/mvcobject) [![Build Status](https://travis-ci.org/Wyntau/MVCObject.png)](https://travis-ci.org/Wyntau/MVCObject) [![Dependencies Status](https://david-dm.org/Wyntau/MVCObject.png)](https://david-dm.org/Wyntau/MVCObject)
 
 An implementation of [Google Maps' MVCObject](https://web.archive.org/web/20140331075724/https://developers.google.com/maps/articles/mvcfun) for Node.js and browers.
 
@@ -50,7 +50,7 @@ Thanks to @twpayne, the test suites are based on his [mvcobject_test.js](https:/
 ### LICENSE
 The MIT License (MIT)
 
-Copyright (c) 2013 - present Treri treri.liu@gmail.com
+Copyright (c) 2013 - present Wyntau wyntau@outlook.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
