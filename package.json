@@ -9,8 +9,8 @@
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "rollup -c build/rollup.config.js --watch",
-    "test": "mocha",
-    "build": "tsc -d -m umd mvcobject.ts && uglifyjs -m -c -o mvcobject.min.js -- mvcobject.js"
+    "build": "npm run clean && NODE_ENV=production rollup -c build/rollup.config.js",
+    "test": "mocha"
   },
   "types": "dist/mvcobject.d.ts",
   "repository": {
@@ -39,8 +39,7 @@
     "rollup-plugin-uglify": "^6.0.0",
     "sinon": "~1.14.1",
     "sinon-chai": "~2.7.0",
-    "typescript": "^3.2.2",
-    "uglify-js": "^2.4.19"
+    "typescript": "^3.2.2"
   },
   "dependencies": {
     "tslib": "^1.9.3"
