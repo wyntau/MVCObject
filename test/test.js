@@ -1,7 +1,3 @@
-function toKey(key) {
-    return '_' + key;
-}
-
 describe('MVCObject', function () {
     it('model', function () {
         var m = new MVCObject();
@@ -288,7 +284,7 @@ describe('MVCObject', function () {
     /*
     set(key, value):
     - 已经绑定过, target[setterName](key, value) || target.set(key, value);
-    - 未绑定过的, self[toKey(key)] = value
+    - 未绑定过的, self[key] = value
     - self[setterName] 不会被调用, 当有其它对象绑定到此对象时, 在其它对象上调用set(key, value)时会调用此对象的self[setterName]
     */
     it('Setter', function () {
@@ -297,14 +293,14 @@ describe('MVCObject', function () {
         a.setX = sinon.spy();
         a.set('x', 1);
         a.get('x').should.equal(1);
-        a[toKey('x')].should.equal(1); // self[toKey(key)] = value
+        a.x.should.equal(1); // self[key] = value
         a.setX.should.not.have.been.called // 自己的self[setterName]() 未被调用
     });
 
     it('SetterBind', function () {
         var a = new MVCObject();
         a.setX = function (value) {
-            this[toKey('x')] = value
+            this.x = value
         }
         sinon.spy(a, 'setX');
         var b = new MVCObject();
@@ -318,15 +314,15 @@ describe('MVCObject', function () {
     /*
     get(key):
     - 已经绑定过: target[getterName](key) || target.get(key);
-    - 未绑定过: self[toKey(key)]
+    - 未绑定过: self[key]
     - self[getterName] 不会被调用, 当有其它对象绑定到此对象时, 在其它对象上调用get(key)时会调用此对象的self[getterName]
     - 自己原本有值, 只要绑定后, 就会被绑定过的值覆盖, 即可被覆盖的值为undefined
     */
     it('Getter', function () {
         var a = new MVCObject();
         a.getX = sinon.spy();
-        a[toKey('x')] = 2
-        a.get('x').should.equal(2); // 直接返回self[toKey(key)]
+        a.x = 2
+        a.get('x').should.equal(2); // 直接返回self[key]
         a.getX.should.not.have.been.called // getterName 未被调用
     });
 

@@ -17,10 +17,6 @@ function getOid(obj: MVCObject) {
   return obj[oid] || (obj[oid] = ++ooid);
 }
 
-function toKey(key: string) {
-  return '_' + key;
-}
-
 function getGetterName(key: string) {
   if (getterNameCache.hasOwnProperty(key)) {
     return getterNameCache[key];
@@ -92,8 +88,8 @@ export class MVCObject{
       } else {
         value = target.get(targetKey);
       }
-    } else if (self.hasOwnProperty(toKey(key))) {
-      value = self[toKey(key)];
+    } else if (self.hasOwnProperty(key)) {
+      value = self[key];
     }
     return value;
   }
@@ -118,7 +114,7 @@ export class MVCObject{
         target.set(targetKey, value);
       }
     } else {
-      this[toKey(key)] = value;
+      this[key] = value;
       triggerChange(self, key);
     }
     return self;
@@ -205,7 +201,7 @@ export class MVCObject{
       if (accessor) {
         var target = accessor.target;
         var targetKey = accessor.targetKey;
-        self[toKey(key)] = self.get(key);
+        self[key] = self.get(key);
         delete target[bindings][targetKey][getOid(self)];
         delete self[accessors][key];
       }
