@@ -1,2 +1,5 @@
-test
+src/
+build/
+test/
+tsconfig.json
 .travis.yml
