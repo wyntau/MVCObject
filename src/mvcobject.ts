@@ -1,50 +1,45 @@
-export class Accessor {
-  constructor(public target: MVCObject, public targetKey: string) { };
+class Binding {
+  constructor(public binder: MVCObject, public binderKey: string) { };
 }
 
-let getterNameCache = {};
-let setterNameCache = {};
+class Accessor {
+  constructor(public target: MVCObject, public targetKey: string, public binding: Binding) { };
+}
+
+const bindings = '__o_bindings';
+const accessors = '__o_accessors';
+const oid = '__o_oid';
+
 let ooid = 0;
-let bindings = '__o_bindings';
-let accessors = '__o_accessors';
-let oid = '__o_oid';
 
-function capitalize(str: string) {
-  return str.substr(0, 1).toUpperCase() + str.substr(1);
+function capitalize(str: string): string {
+  return capitalize[str] || (capitalize[str] = str.substr(0, 1).toUpperCase() + str.substr(1));
 }
 
-function getOid(obj: MVCObject) {
+function getOid(obj: object): number {
   return obj[oid] || (obj[oid] = ++ooid);
 }
 
-function getGetterName(key: string) {
-  if (getterNameCache.hasOwnProperty(key)) {
-    return getterNameCache[key];
-  } else {
-    return getterNameCache[key] = 'get' + capitalize(key);
-  }
+function hasOwnProperty(instance: object, property: string): boolean {
+  return Object.prototype.hasOwnProperty.call(instance, property);
 }
 
-function getSetterName(key: string) {
-  if (setterNameCache.hasOwnProperty(key)) {
-    return setterNameCache[key];
-  } else {
-    return setterNameCache[key] = 'set' + capitalize(key);
-  }
+function getGetterName(key: string): string {
+  return `get${capitalize(key)}`;
+}
+
+function getSetterName(key: string): string {
+  return `set${capitalize(key)}`;
 }
 
 /**
- * @description 这个函数的触发需要时机
+ * 这个函数的触发需要时机
  * 在一个key所在的终端对象遍历到时触发
  * 同时传播给所有直接、间接监听targetKey的对象
  * 在调用MVCObject的set方法时开始遍历
- *
- * @param target {MVCObject} 继承了MVCObject的对象
- * @param targetKey {String} 当前对象中被监听的字段
- * @return {void}
  */
-function triggerChange(target: MVCObject, targetKey: string) {
-  var evt = targetKey + '_changed';
+function triggerChange(target: MVCObject, targetKey: string): void {
+  const evt = `${targetKey}_changed`;
 
   /**
    * 优先检测并执行目标对象key对应的响应方法
@@ -52,62 +47,49 @@ function triggerChange(target: MVCObject, targetKey: string) {
    */
   if (target[evt]) {
     target[evt]();
-  } else if (typeof target.changed === 'function') {
+  } else {
     target.changed(targetKey);
   }
 
   if (target[bindings] && target[bindings][targetKey]) {
-    var ref = target[bindings][targetKey];
-    var bindingObj, bindingUid;
-    for (bindingUid in ref) {
-      if (ref.hasOwnProperty(bindingUid)) {
-        bindingObj = ref[bindingUid];
-        triggerChange(bindingObj.target, bindingObj.targetKey);
+    const bindingMap = target[bindings][targetKey];
+    for (let key in bindingMap) {
+      if (hasOwnProperty(bindingMap, key)) {
+        const binding = bindingMap[key];
+        triggerChange(binding.binder, binding.binderKey);
       }
     }
   }
 }
 
 export class MVCObject {
-
   /**
-   * @description 从依赖链中获取对应key的值
-   * @param {String} key 关键值
-   * @return {mixed} 对应的值
+   * 从依赖链中获取对应key的值
    */
-  get<T>(key: string): T {
-    var self = this;
-    if (self[accessors] && self[accessors].hasOwnProperty(key)) {
-      var accessor = self[accessors][key];
-      var targetKey = accessor.targetKey;
-      var target = accessor.target;
-      var getterName = getGetterName(targetKey);
-      var value;
+  get<T = any>(key: string): T {
+    const self = this;
+    if (self[accessors] && hasOwnProperty(self[accessors], key)) {
+      const { target, targetKey } = self[accessors][key];
+      const getterName = getGetterName(targetKey);
       if (target[getterName]) {
-        value = target[getterName]();
+        return target[getterName]();
       } else {
-        value = target.get(targetKey);
+        return target.get(targetKey);
       }
-    } else if (self.hasOwnProperty(key)) {
-      value = self[key];
+    } else {
+      return self[key];
     }
-    return value;
   }
 
   /**
-   * @description set方法遍历依赖链直到找到key的持有对象设置key的值;
+   * set方法遍历依赖链直到找到key的持有对象设置key的值;
    * 有三个分支
-   * @param {String} key 关键值
-   * @param {all} value 要给key设定的值,可以是所有类型
-   * @return {this}
    */
   set(key: string, value?: any): MVCObject {
-    var self = this;
-    if (self[accessors] && self[accessors].hasOwnProperty(key)) {
-      var accessor = self[accessors][key];
-      var targetKey = accessor.targetKey;
-      var target = accessor.target;
-      var setterName = getSetterName(targetKey);
+    const self = this;
+    if (self[accessors] && hasOwnProperty(self[accessors], key)) {
+      const { target, targetKey } = self[accessors][key];
+      const setterName = getSetterName(targetKey);
       if (target[setterName]) {
         target[setterName](value);
       } else {
@@ -120,22 +102,15 @@ export class MVCObject {
     return self;
   }
 
-  /**
-   * @description 没个MVCObject对象各自的响应对应的key值变化时的逻辑
-   */
   changed(...args: any[]): any { }
 
   /**
-   * @description 手动触发对应key的事件传播
-   * @param {String} key 关键值
-   * @return {this}
+   * 手动触发对应key的事件传播
    */
   notify(key: string): MVCObject {
-    var self = this;
-    if (self[accessors] && self[accessors].hasOwnProperty(key)) {
-      var accessor = self[accessors][key];
-      var targetKey = accessor.targetKey;
-      var target = accessor.target;
+    const self = this;
+    if (self[accessors] && hasOwnProperty(self[accessors], key)) {
+      const { target, targetKey } = self[accessors][key];
       target.notify(targetKey);
     } else {
       triggerChange(self, key);
@@ -143,13 +118,12 @@ export class MVCObject {
     return self;
   }
 
-  setValues(values): MVCObject {
-    var self = this;
-    var key, setterName, value;
-    for (key in values) {
-      if (values.hasOwnProperty(key)) {
-        value = values[key];
-        setterName = getSetterName(key);
+  setValues(values: object): MVCObject {
+    const self = this;
+    for (let key in values) {
+      if (hasOwnProperty(values, key)) {
+        const value = values[key];
+        const setterName = getSetterName(key);
         if (self[setterName]) {
           self[setterName](value);
         } else {
@@ -161,26 +135,21 @@ export class MVCObject {
   }
 
   /**
-   * @description 将当前对象的一个key与目标对象的targetKey建立监听和广播关系
-   * @param key {String} 当前对象上的key
-   * @param target {Object} 目标对象
-   * @param tarrgetKey {String} 目标对象上的key
-   * @param noNotify {Boolean}
-   * @return {Accessor}
+   * 将当前对象的一个key与目标对象的targetKey建立监听和广播关系
    */
   bindTo(key: string, target: MVCObject, targetKey: string = key, noNotify?: boolean): MVCObject {
-    var self = this;
+    const self = this;
     self.unbind(key);
 
     self[accessors] || (self[accessors] = {});
     target[bindings] || (target[bindings] = {});
     target[bindings][targetKey] || (target[bindings][targetKey] = {});
 
-    var binding = new Accessor(self, key);
-    var accessor = new Accessor(target, targetKey);
+    const binding = new Binding(self, key);
+    const accessor = new Accessor(target, targetKey, binding);
 
     self[accessors][key] = accessor;
-    target[bindings][targetKey][getOid(self)] = binding;
+    target[bindings][targetKey][getOid(binding)] = binding;
 
     if (!noNotify) {
       triggerChange(self, key);
@@ -190,33 +159,31 @@ export class MVCObject {
   }
 
   /**
-   * @description 解除当前对象上key与目标对象的监听
-   * @param {String} key 关键字
-   * @return {this}
+   * 解除当前对象上key与目标对象的监听
    */
   unbind(key: string): MVCObject {
-    var self = this;
-    if (self[accessors]) {
-      var accessor = self[accessors][key];
-      if (accessor) {
-        var target = accessor.target;
-        var targetKey = accessor.targetKey;
-        self[key] = self.get(key);
-        delete target[bindings][targetKey][getOid(self)];
-        delete self[accessors][key];
-      }
+    const self = this;
+    if (!self[accessors] || !self[accessors][key]) {
+      return self;
     }
+
+    const { target, targetKey, binding } = self[accessors][key];
+    self[key] = self.get(key);
+    delete target[bindings][targetKey][getOid(binding)];
+    delete self[accessors][key];
+
     return self;
   }
 
   unbindAll(): MVCObject {
-    var self = this;
-    if (self[accessors]) {
-      var ref = self[accessors];
-      for (var key in ref) {
-        if (ref.hasOwnProperty(key)) {
-          self.unbind(key);
-        }
+    const self = this;
+    if (!self[accessors]) {
+      return self;
+    }
+    const accessorMap = self[accessors];
+    for (let key in accessorMap) {
+      if (hasOwnProperty(accessorMap, key)) {
+        self.unbind(key);
       }
     }
     return self;
