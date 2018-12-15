@@ -12,7 +12,7 @@
     "build": "npm run clean && NODE_ENV=production rollup -c build/rollup.config.js",
     "test": "mocha"
   },
-  "types": "dist/mvcobject.d.ts",
+  "types": "mvcobject.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Wyntau/MVCObject.git"

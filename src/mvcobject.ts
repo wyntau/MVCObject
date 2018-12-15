@@ -1,5 +1,5 @@
-export class Accessor{
-  constructor(public target: MVCObject, public targetKey: string){};
+export class Accessor {
+  constructor(public target: MVCObject, public targetKey: string) { };
 }
 
 let getterNameCache = {};
@@ -68,14 +68,14 @@ function triggerChange(target: MVCObject, targetKey: string) {
   }
 }
 
-export class MVCObject{
+export class MVCObject {
 
   /**
    * @description 从依赖链中获取对应key的值
    * @param {String} key 关键值
    * @return {mixed} 对应的值
    */
-  get<T>(key: string): T{
+  get<T>(key: string): T {
     var self = this;
     if (self[accessors] && self[accessors].hasOwnProperty(key)) {
       var accessor = self[accessors][key];
@@ -101,7 +101,7 @@ export class MVCObject{
    * @param {all} value 要给key设定的值,可以是所有类型
    * @return {this}
    */
-  set(key: string, value?: any): MVCObject{
+  set(key: string, value?: any): MVCObject {
     var self = this;
     if (self[accessors] && self[accessors].hasOwnProperty(key)) {
       var accessor = self[accessors][key];
@@ -123,14 +123,14 @@ export class MVCObject{
   /**
    * @description 没个MVCObject对象各自的响应对应的key值变化时的逻辑
    */
-  changed(...args: any[]): any{}
+  changed(...args: any[]): any { }
 
   /**
    * @description 手动触发对应key的事件传播
    * @param {String} key 关键值
    * @return {this}
    */
-  notify(key: string): MVCObject{
+  notify(key: string): MVCObject {
     var self = this;
     if (self[accessors] && self[accessors].hasOwnProperty(key)) {
       var accessor = self[accessors][key];
@@ -143,7 +143,7 @@ export class MVCObject{
     return self;
   }
 
-  setValues(values): MVCObject{
+  setValues(values): MVCObject {
     var self = this;
     var key, setterName, value;
     for (key in values) {
@@ -168,7 +168,7 @@ export class MVCObject{
    * @param noNotify {Boolean}
    * @return {Accessor}
    */
-  bindTo(key: string, target: MVCObject, targetKey: string = key, noNotify?: boolean): MVCObject{
+  bindTo(key: string, target: MVCObject, targetKey: string = key, noNotify?: boolean): MVCObject {
     var self = this;
     self.unbind(key);
 
@@ -194,7 +194,7 @@ export class MVCObject{
    * @param {String} key 关键字
    * @return {this}
    */
-  unbind(key: string): MVCObject{
+  unbind(key: string): MVCObject {
     var self = this;
     if (self[accessors]) {
       var accessor = self[accessors][key];
@@ -209,7 +209,7 @@ export class MVCObject{
     return self;
   }
 
-  unbindAll(): MVCObject{
+  unbindAll(): MVCObject {
     var self = this;
     if (self[accessors]) {
       var ref = self[accessors];
