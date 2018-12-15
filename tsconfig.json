@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "declaration": true,
+    "sourceMap": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ],
+    "lib": [
+      "dom",
+      "es5",
+      "es2015.core",
+      "es2015.promise",
+      "es2015.iterable"
+    ],
+    "outDir": "dist",
+    "importHelpers": true,
+    "noEmitHelpers": true,
+    "noUnusedLocals": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
