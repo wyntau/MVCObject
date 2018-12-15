@@ -7,17 +7,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "target": "es5",
-    "typeRoots": [
-      "node_modules/@types",
-      "src/@types"
-    ],
-    "lib": [
-      "dom",
-      "es5",
-      "es2015.core",
-      "es2015.promise",
-      "es2015.iterable"
-    ],
     "outDir": "dist",
     "importHelpers": true,
     "noEmitHelpers": true,
