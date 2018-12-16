@@ -230,6 +230,14 @@ export class MVCObject {
     return new EventListener(this, eventName, handler);
   }
 
+  public addListenerOnce(eventName: string, handler: Function): EventListener {
+    const eventListener = new EventListener(this, eventName, () => {
+      handler();
+      eventListener.remove();
+    });
+    return eventListener;
+  }
+
   public removeListener(eventListener: EventListener): void {
     MVCObject.removeListener(eventListener);
   }
