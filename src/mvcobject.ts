@@ -1,44 +1,16 @@
-class Binding {
-  constructor(public binder: MVCObject, public binderKey: string) { };
-}
+import { oBindings, oAccessors, oListeners, oObjectId } from './constant';
+import { Accessor } from './accessor';
+import { Binding } from './binding';
+import { EventListener } from './eventListener';
 
-class Accessor {
-  constructor(public target: MVCObject, public targetKey: string, public binding: Binding) { };
-}
-
-const bindings = '__o_bindings';
-const accessors = '__o_accessors';
-const listeners = '__o_listeners';
-const oid = '__o_oid';
-
-let ooid = 0;
-
-let listenerId = 0;
-class EventListener {
-  private id: number;
-  constructor(private instance: object, private eventName: string, public handler: Function) {
-    this.id = ++listenerId;
-
-    instance[listeners] = instance[listeners] || {};
-    instance[listeners][eventName] = instance[listeners][eventName] || {};
-
-    instance[listeners][eventName][this.id] = this;
-  }
-
-  public remove() {
-    const { instance, eventName } = this;
-    instance[listeners] = instance[listeners] || {};
-    instance[listeners][eventName] = instance[listeners][eventName] || {};
-    delete instance[listeners][eventName][this.id];
-  }
-}
+let objectId = 0;
 
 function capitalize(str: string): string {
   return capitalize[str] || (capitalize[str] = str.substr(0, 1).toUpperCase() + str.substr(1));
 }
 
 function getOid(obj: object): number {
-  return obj[oid] || (obj[oid] = ++ooid);
+  return obj[oObjectId] || (obj[oObjectId] = ++objectId);
 }
 
 function hasOwnProperty(instance: object, property: string): boolean {
@@ -72,22 +44,22 @@ function triggerChange(target: MVCObject, targetKey: string): void {
     target.changed(targetKey);
   }
 
-  if (target[bindings] && target[bindings][targetKey]) {
-    const bindingMap = target[bindings][targetKey];
-    for (let key in bindingMap) {
-      if (hasOwnProperty(bindingMap, key)) {
-        const binding = bindingMap[key];
+  if (target[oBindings] && target[oBindings][targetKey]) {
+    const bindings = target[oBindings][targetKey];
+    for (let key in bindings) {
+      if (hasOwnProperty(bindings, key)) {
+        const binding = bindings[key];
         triggerChange(binding.binder, binding.binderKey);
       }
     }
   }
 
-  if (!target[listeners] || !target[listeners][eventName]) {
+  if (!target[oListeners] || !target[oListeners][eventName]) {
     return;
   }
-  const map = { ...target[listeners][eventName] };
-  for (let id in map) {
-    const eventListener = map[id];
+  const listeners = { ...target[oListeners][eventName] };
+  for (let id in listeners) {
+    const eventListener = listeners[id];
     if (eventListener && eventListener.handler) {
       eventListener.handler();
     }
@@ -105,8 +77,8 @@ export class MVCObject {
    */
   get<T = any>(key: string): T {
     const self = this;
-    if (self[accessors] && hasOwnProperty(self[accessors], key)) {
-      const { target, targetKey } = self[accessors][key];
+    if (self[oAccessors] && hasOwnProperty(self[oAccessors], key)) {
+      const { target, targetKey } = self[oAccessors][key];
       const getterName = getGetterName(targetKey);
       if (target[getterName]) {
         return target[getterName]();
@@ -124,8 +96,8 @@ export class MVCObject {
    */
   set(key: string, value?: any): MVCObject {
     const self = this;
-    if (self[accessors] && hasOwnProperty(self[accessors], key)) {
-      const { target, targetKey } = self[accessors][key];
+    if (self[oAccessors] && hasOwnProperty(self[oAccessors], key)) {
+      const { target, targetKey } = self[oAccessors][key];
       const setterName = getSetterName(targetKey);
       if (target[setterName]) {
         target[setterName](value);
@@ -146,8 +118,8 @@ export class MVCObject {
    */
   notify(key: string): MVCObject {
     const self = this;
-    if (self[accessors] && hasOwnProperty(self[accessors], key)) {
-      const { target, targetKey } = self[accessors][key];
+    if (self[oAccessors] && hasOwnProperty(self[oAccessors], key)) {
+      const { target, targetKey } = self[oAccessors][key];
       target.notify(targetKey);
     } else {
       triggerChange(self, key);
@@ -178,15 +150,15 @@ export class MVCObject {
     const self = this;
     self.unbind(key);
 
-    self[accessors] || (self[accessors] = {});
-    target[bindings] || (target[bindings] = {});
-    target[bindings][targetKey] || (target[bindings][targetKey] = {});
+    self[oAccessors] || (self[oAccessors] = {});
+    target[oBindings] || (target[oBindings] = {});
+    target[oBindings][targetKey] || (target[oBindings][targetKey] = {});
 
     const binding = new Binding(self, key);
     const accessor = new Accessor(target, targetKey, binding);
 
-    self[accessors][key] = accessor;
-    target[bindings][targetKey][getOid(binding)] = binding;
+    self[oAccessors][key] = accessor;
+    target[oBindings][targetKey][getOid(binding)] = binding;
 
     if (!noNotify) {
       triggerChange(self, key);
@@ -200,26 +172,26 @@ export class MVCObject {
    */
   unbind(key: string): MVCObject {
     const self = this;
-    if (!self[accessors] || !self[accessors][key]) {
+    if (!self[oAccessors] || !self[oAccessors][key]) {
       return self;
     }
 
-    const { target, targetKey, binding } = self[accessors][key];
+    const { target, targetKey, binding } = self[oAccessors][key];
     self[key] = self.get(key);
-    delete target[bindings][targetKey][getOid(binding)];
-    delete self[accessors][key];
+    delete target[oBindings][targetKey][getOid(binding)];
+    delete self[oAccessors][key];
 
     return self;
   }
 
   unbindAll(): MVCObject {
     const self = this;
-    if (!self[accessors]) {
+    if (!self[oAccessors]) {
       return self;
     }
-    const accessorMap = self[accessors];
-    for (let key in accessorMap) {
-      if (hasOwnProperty(accessorMap, key)) {
+    const accessors = self[oAccessors];
+    for (let key in accessors) {
+      if (hasOwnProperty(accessors, key)) {
         self.unbind(key);
       }
     }
