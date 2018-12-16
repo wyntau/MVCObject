@@ -45,7 +45,17 @@ describe('MVCObject', function () {
     spy = sinon.spy();
     m.addListener('k_changed', spy);
     m.notify('k');
-    spy.should.have.been.calledOnce
+    m.notify('k');
+    spy.should.have.been.calledTwice;
+  });
+
+  it('NotifyKeyOnceEvent', function () {
+    m = new MVCObject
+    spy = sinon.spy();
+    m.addListenerOnce('k_changed', spy);
+    m.notify('k');
+    m.notify('k');
+    spy.should.have.been.calledOnce;
   });
 
   it('SetNotifyCallback', function () {
@@ -87,7 +97,17 @@ describe('MVCObject', function () {
     spy = sinon.spy();
     m.addListener('k_changed', spy);
     m.set('k', 1);
-    spy.should.have.been.calledOnce
+    m.set('k', 2);
+    spy.should.have.been.calledTwice;
+  });
+
+  it('SetNotifyKeyOnceEvent', function () {
+    m = new MVCObject
+    spy = sinon.spy();
+    m.addListenerOnce('k_changed', spy);
+    m.set('k', 1);
+    m.set('k', 2);
+    spy.should.have.been.calledOnce;
   });
 
   it('SetBind', function () {
