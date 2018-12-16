@@ -8,9 +8,30 @@ class Accessor {
 
 const bindings = '__o_bindings';
 const accessors = '__o_accessors';
+const listeners = '__o_listeners';
 const oid = '__o_oid';
 
 let ooid = 0;
+
+let listenerId = 0;
+class EventListener {
+  private id: number;
+  constructor(private instance: object, private eventName: string, public handler: Function) {
+    this.id = ++listenerId;
+
+    instance[listeners] = instance[listeners] || {};
+    instance[listeners][eventName] = instance[listeners][eventName] || {};
+
+    instance[listeners][eventName][this.id] = this;
+  }
+
+  public remove() {
+    const { instance, eventName } = this;
+    instance[listeners] = instance[listeners] || {};
+    instance[listeners][eventName] = instance[listeners][eventName] || {};
+    delete instance[listeners][eventName][this.id];
+  }
+}
 
 function capitalize(str: string): string {
   return capitalize[str] || (capitalize[str] = str.substr(0, 1).toUpperCase() + str.substr(1));
@@ -39,14 +60,14 @@ function getSetterName(key: string): string {
  * 在调用MVCObject的set方法时开始遍历
  */
 function triggerChange(target: MVCObject, targetKey: string): void {
-  const evt = `${targetKey}_changed`;
+  const eventName = `${targetKey}_changed`;
 
   /**
    * 优先检测并执行目标对象key对应的响应方法
    * 其次检测并执行默认方法
    */
-  if (target[evt]) {
-    target[evt]();
+  if (target[eventName]) {
+    target[eventName]();
   } else {
     target.changed(targetKey);
   }
@@ -60,9 +81,25 @@ function triggerChange(target: MVCObject, targetKey: string): void {
       }
     }
   }
+
+  if (!target[listeners] || !target[listeners][eventName]) {
+    return;
+  }
+  const map = { ...target[listeners][eventName] };
+  for (let id in map) {
+    const eventListener = map[id];
+    if (eventListener && eventListener.handler) {
+      eventListener.handler();
+    }
+  }
 }
 
 export class MVCObject {
+  public static removeListener(eventListener: EventListener): void {
+    if (eventListener) {
+      eventListener.remove();
+    }
+  }
   /**
    * 从依赖链中获取对应key的值
    */
@@ -187,6 +224,14 @@ export class MVCObject {
       }
     }
     return self;
+  }
+
+  public addListener(eventName: string, handler: Function): EventListener {
+    return new EventListener(this, eventName, handler);
+  }
+
+  public removeListener(eventListener: EventListener): void {
+    MVCObject.removeListener(eventListener);
   }
 }
 
