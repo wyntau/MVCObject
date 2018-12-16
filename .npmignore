@@ -4,3 +4,5 @@ test/
 .vscode/
 tsconfig.json
 .travis.yml
+yarn.lock
+package-lock.json
