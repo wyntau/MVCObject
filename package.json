@@ -2,37 +2,46 @@
   "name": "mvcobject",
   "version": "2.0.0",
   "description": "An implementation of Google Maps' MVCObject for Node.js and browers",
-  "main": "MVCObject.js",
+  "main": "dist/mvcobject.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha",
-    "build": "tsc -d -m umd MVCObject.ts && uglifyjs -m -c -o MVCObject.min.js -- MVCObject.js"
+    "clean": "rm -rf dist",
+    "dev": "rollup -c build/rollup.config.js --watch",
+    "build": "npm run clean && NODE_ENV=production rollup -c build/rollup.config.js",
+    "test": "mocha"
   },
-  "types": "MVCObject.d.ts",
+  "types": "mvcobject.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Treri/MVCObject.git"
+    "url": "https://github.com/Wyntau/MVCObject.git"
   },
   "keywords": [
     "MVCObject"
   ],
-  "author": "Treri",
+  "author": "Wyntau",
   "contributors": [
-    "Treri <treri.liu@gmail.com>",
+    "Wyntau <wyntau@outlook.com>",
     "saidz <zyx.zhuyuxiang@gmail.com>"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Treri/MVCObject/issues"
+    "url": "https://github.com/Wyntau/MVCObject/issues"
   },
   "devDependencies": {
     "chai": "~2.2.0",
     "mocha": "~2.2.3",
+    "rollup": "^0.67.4",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-typescript": "^1.0.0",
+    "rollup-plugin-uglify": "^6.0.0",
     "sinon": "~1.14.1",
     "sinon-chai": "~2.7.0",
-    "typescript": "^2.0.3",
-    "uglify-js": "^2.4.19"
+    "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "tslib": "^1.9.3"
   }
 }

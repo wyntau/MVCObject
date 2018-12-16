@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true,
+  "eslint.enable": false,
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true
+}
