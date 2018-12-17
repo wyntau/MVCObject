@@ -44,6 +44,17 @@ const bundles = [{
     typescript(Object.assign({}, typescriptOptions)),
     uglify()
   ]
+}, {
+  input: 'src/mvcobject.ts',
+  output: {
+    file: `dist/mvcobject.esm.js`,
+    format: 'esm'
+  },
+  plugins: [
+    resolve(Object.assign({}, resolveOptions)),
+    commonjs(),
+    typescript(Object.assign({}, typescriptOptions))
+  ]
 }];
 
 export default bundles;

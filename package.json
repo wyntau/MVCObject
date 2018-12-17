@@ -3,6 +3,7 @@
   "version": "2.1.2",
   "description": "An implementation of Google Maps' MVCObject for Node.js and browers",
   "main": "dist/mvcobject.js",
+  "module": "dist/mvcobject.esm.js",
   "directories": {
     "test": "test"
   },
