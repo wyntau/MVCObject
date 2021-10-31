@@ -1,18 +1,23 @@
-import { oBindings, oAccessors, oListeners, oObjectId } from './constant';
+import { oBindings, oAccessors, oListeners } from './constant';
 import { Accessor } from './accessor';
 import { Binding } from './binding';
 import { EventListener } from './eventListener';
+import { makeSymbol } from './symbol';
+
+const OBJECT_ID = makeSymbol('objectId');
+const BINDINGS = makeSymbol('bindings');
+const ACCESSORS = makeSymbol('accesssors');
+const LISTENERS = makeSymbol('listeners');
 
 let objectId = 0;
 
 function capitalize(str: string): string {
-  // @ts-ignore: 允许变量
-  return capitalize[str] || (capitalize[str] = str.substr(0, 1).toUpperCase() + str.substr(1));
+  return str.substr(0, 1).toUpperCase() + str.substr(1);
 }
 
 function getObjectId(obj: object): number {
   // @ts-ignore: 允许变量
-  return obj[oObjectId] || (obj[oObjectId] = ++objectId);
+  return obj[OBJECT_ID] || (obj[OBJECT_ID] = ++objectId);
 }
 
 function hasOwnProperty(instance: object, property: string): boolean {
