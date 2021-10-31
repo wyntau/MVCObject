@@ -1,4 +1,4 @@
-import { oAccessors, oListeners } from './constant';
+import { oListeners } from './constant';
 import { Accessor } from './accessor';
 import { Binding } from './binding';
 import { EventListener } from './eventListener';
@@ -85,8 +85,8 @@ export class MVCObject {
    * 从依赖链中获取对应key的值
    */
   public get<T = any>(key: string): T {
-    if (this[oAccessors] && hasOwnProperty(this[oAccessors], key)) {
-      const { target, targetKey } = this[oAccessors][key];
+    if (this[ACCESSORS] && hasOwnProperty(this[ACCESSORS], key)) {
+      const { target, targetKey } = this[ACCESSORS][key];
       const getterName = getGetterName(targetKey);
       if (target[getterName]) {
         return target[getterName]();
@@ -103,8 +103,8 @@ export class MVCObject {
    * 有三个分支
    */
   public set(key: string, value?: any): MVCObject {
-    if (this[oAccessors] && hasOwnProperty(this[oAccessors], key)) {
-      const { target, targetKey } = this[oAccessors][key];
+    if (this[ACCESSORS] && hasOwnProperty(this[ACCESSORS], key)) {
+      const { target, targetKey } = this[ACCESSORS][key];
       const setterName = getSetterName(targetKey);
       if (target[setterName]) {
         target[setterName](value);
@@ -124,8 +124,8 @@ export class MVCObject {
    * 手动触发对应key的事件传播
    */
   public notify(key: string): MVCObject {
-    if (this[oAccessors] && hasOwnProperty(this[oAccessors], key)) {
-      const { target, targetKey } = this[oAccessors][key];
+    if (this[ACCESSORS] && hasOwnProperty(this[ACCESSORS], key)) {
+      const { target, targetKey } = this[ACCESSORS][key];
       target.notify(targetKey);
     } else {
       triggerChange(this, key);
@@ -154,14 +154,14 @@ export class MVCObject {
   public bindTo(key: string, target: MVCObject, targetKey: string = key, noNotify?: boolean): MVCObject {
     this.unbind(key);
 
-    this[oAccessors] || (this[oAccessors] = {});
+    this[ACCESSORS] || (this[ACCESSORS] = {});
     target[BINDINGS] || (target[BINDINGS] = {});
     target[BINDINGS][targetKey] || (target[BINDINGS][targetKey] = {});
 
     const binding = new Binding(this, key);
     const accessor = new Accessor(target, targetKey, binding);
 
-    this[oAccessors][key] = accessor;
+    this[ACCESSORS][key] = accessor;
     target[BINDINGS][targetKey][getObjectId(binding)] = binding;
 
     if (!noNotify) {
@@ -175,23 +175,23 @@ export class MVCObject {
    * 解除当前对象上key与目标对象的监听
    */
   public unbind(key: string): MVCObject {
-    if (!this[oAccessors] || !this[oAccessors][key]) {
+    if (!this[ACCESSORS] || !this[ACCESSORS][key]) {
       return this;
     }
 
-    const { target, targetKey, binding } = this[oAccessors][key];
+    const { target, targetKey, binding } = this[ACCESSORS][key];
     this[key] = this.get(key);
     delete target[BINDINGS][targetKey][getObjectId(binding)];
-    delete this[oAccessors][key];
+    delete this[ACCESSORS][key];
 
     return this;
   }
 
   public unbindAll(): MVCObject {
-    if (!this[oAccessors]) {
+    if (!this[ACCESSORS]) {
       return this;
     }
-    const accessors = this[oAccessors];
+    const accessors = this[ACCESSORS];
     for (const key in accessors) {
       if (hasOwnProperty(accessors, key)) {
         this.unbind(key);
