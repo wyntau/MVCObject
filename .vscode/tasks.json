@@ -3,17 +3,9 @@
   // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
-    {
-      "type": "npm",
-      "script": "dev",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared"
-      }
-    }
+    { "type": "npm", "script": "preview", "group": "build" },
+    { "type": "npm", "script": "clean", "group": "build" },
+    { "type": "npm", "script": "watch", "group": "build" },
+    { "type": "npm", "script": "build", "group": "build" }
   ]
 }

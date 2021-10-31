@@ -1,0 +1,31 @@
+{
+  "root": true,
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {},
+    "project": ["./tsconfig.json"]
+  },
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+  "rules": {
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "Function": false
+        }
+      }
+    ],
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-ignore": "allow-with-description"
+      }
+    ]
+  }
+}
