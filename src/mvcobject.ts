@@ -1,15 +1,7 @@
-import { oListeners } from './constant';
 import { Accessor } from './accessor';
 import { Binding } from './binding';
 import { EventListener } from './eventListener';
-import { makeSymbol } from './symbol';
-
-type PropertyKey = Parameters<typeof Object.hasOwnProperty>[0];
-
-const OBJECT_ID = makeSymbol('objectId');
-const BINDINGS = makeSymbol('bindings');
-const ACCESSORS = makeSymbol('accesssors');
-const LISTENERS = makeSymbol('listeners');
+import { OBJECT_ID, ACCESSORS, BINDINGS, LISTENERS } from './symbol';
 
 let objectId = 0;
 
@@ -63,10 +55,10 @@ function triggerChange(target: MVCObject, targetKey: string): void {
     }
   }
 
-  if (!target[oListeners] || !target[oListeners][eventName]) {
+  if (!target[LISTENERS] || !target[LISTENERS][eventName]) {
     return;
   }
-  const listeners = { ...target[oListeners][eventName] };
+  const listeners = { ...target[LISTENERS][eventName] };
   for (const id in listeners) {
     const eventListener = listeners[id];
     if (eventListener && eventListener.handler) {

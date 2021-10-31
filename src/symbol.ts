@@ -11,3 +11,8 @@ if (hasSymbol) {
 }
 
 export { makeSymbol };
+
+export const OBJECT_ID = makeSymbol('objectId');
+export const BINDINGS = makeSymbol('bindings');
+export const ACCESSORS = makeSymbol('accesssors');
+export const LISTENERS = makeSymbol('listeners');
