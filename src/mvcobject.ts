@@ -1,8 +1,10 @@
-import { oBindings, oAccessors, oListeners } from './constant';
+import { oAccessors, oListeners } from './constant';
 import { Accessor } from './accessor';
 import { Binding } from './binding';
 import { EventListener } from './eventListener';
 import { makeSymbol } from './symbol';
+
+type PropertyKey = Parameters<typeof Object.hasOwnProperty>[0];
 
 const OBJECT_ID = makeSymbol('objectId');
 const BINDINGS = makeSymbol('bindings');
@@ -20,7 +22,7 @@ function getObjectId(obj: object): number {
   return obj[OBJECT_ID] || (obj[OBJECT_ID] = ++objectId);
 }
 
-function hasOwnProperty(instance: object, property: string): boolean {
+function hasOwnProperty(instance: object, property: PropertyKey): boolean {
   return Object.prototype.hasOwnProperty.call(instance, property);
 }
 
@@ -51,8 +53,8 @@ function triggerChange(target: MVCObject, targetKey: string): void {
     target.changed(targetKey);
   }
 
-  if (target[oBindings] && target[oBindings][targetKey]) {
-    const bindings = target[oBindings][targetKey];
+  if (target[BINDINGS] && target[BINDINGS][targetKey]) {
+    const bindings = target[BINDINGS][targetKey];
     for (const key in bindings) {
       if (hasOwnProperty(bindings, key)) {
         const binding = bindings[key];
@@ -153,14 +155,14 @@ export class MVCObject {
     this.unbind(key);
 
     this[oAccessors] || (this[oAccessors] = {});
-    target[oBindings] || (target[oBindings] = {});
-    target[oBindings][targetKey] || (target[oBindings][targetKey] = {});
+    target[BINDINGS] || (target[BINDINGS] = {});
+    target[BINDINGS][targetKey] || (target[BINDINGS][targetKey] = {});
 
     const binding = new Binding(this, key);
     const accessor = new Accessor(target, targetKey, binding);
 
     this[oAccessors][key] = accessor;
-    target[oBindings][targetKey][getObjectId(binding)] = binding;
+    target[BINDINGS][targetKey][getObjectId(binding)] = binding;
 
     if (!noNotify) {
       triggerChange(this, key);
@@ -179,7 +181,7 @@ export class MVCObject {
 
     const { target, targetKey, binding } = this[oAccessors][key];
     this[key] = this.get(key);
-    delete target[oBindings][targetKey][getObjectId(binding)];
+    delete target[BINDINGS][targetKey][getObjectId(binding)];
     delete this[oAccessors][key];
 
     return this;
@@ -214,7 +216,7 @@ export class MVCObject {
     MVCObject.removeListener(eventListener);
   }
 
-  [x: string]: any;
+  [x: PropertyKey]: any;
 }
 
 export default MVCObject;
